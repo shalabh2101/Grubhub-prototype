@@ -1,18 +1,11 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import { Redirect ,Link, NavLink} from 'react-router-dom'
-import Reduxcomponent from '../Reduxcomponent';
-import { connect } from "react-redux";
-import { checklogin } from "../../actions/index.js";
-import Buyerhome from "../Buyerhome/Buyerhome";
 
-// function mapDispatchToProps(dispatch) {
-//     return {
-//         checklogin: data => dispatch(checklogin(data))
-//     }
-// }
 
-class Signinbuyer extends Component{
+
+
+class Userprofile extends Component{
 
    //constructor
     constructor(props){
@@ -126,25 +119,23 @@ render(){
               { this.state.shift && <Redirect to='/buyerhome'/>}
             <br/>
                 <h2 style={{color: 'red',
-    marginTop: '0%',
-    marginLeft: '2%'}}>
+                    marginTop: '0%',
+                    marginLeft: '2%'}}>
                     GRUBHUB
                 </h2>
                 
-<nav class="navbar navbar-expand-lg navbar-dark primary-color">
+      <nav class="navbar navbar-expand-lg navbar-dark primary-color">
 
+            <a class="navbar-brand" href="#" style ={{color:'red'}}>GRUBHUB</a>
 
-  <a class="navbar-brand" href="#" style ={{color:'red'}}>GRUBHUB</a>
-
-</nav>
+     </nav>
 
 
                 <div>
                     
                 </div>
                <div className="container" style={{textAlign:'-webkit-center'}}> 
-              {/* {this.state.errormessege && <p>Not able to sign in. Please check if your password or username are correct</p>} */}
-              {/* onSubmit= {this.signInBuyerCheck} action="http://localhost:3001/signinbuyer" */}
+             
                 <form  onSubmit= {this.signInBuyerCheck} >
                    
                     { this.state.errormessege ? 
@@ -182,6 +173,6 @@ render(){
 }
 
 }
-//const Signinbuyer = connect(null,mapDispatchToProps)(Signinbuyer1);
 
-export default Signinbuyer;
+
+export default Userprofile;

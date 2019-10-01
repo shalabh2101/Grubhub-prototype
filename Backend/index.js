@@ -1,11 +1,15 @@
 //import the require dependencies
 var express = require('express');
 var app = express();
+//var redis   = require("redis");
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
 var cors = require('cors');
 app.set('view engine', 'ejs');
+//var client  = redis.createClient();
+//const redisStore = require('connect-redis')(session);
+
 
 //use cors to allow cross origin resource sharing
 app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
@@ -16,7 +20,9 @@ app.use(session({
     resave              : false, // Forces the session to be saved back to the session store, even if the session was never modified during the request
     saveUninitialized   : false, // Force to save uninitialized session to db. A session is uninitialized when it is new but not modified.
     duration            : 60 * 60 * 1000,    // Overall duration of Session : 30 minutes : 1800 seconds
-    activeDuration      :  5 * 60 * 1000
+    activeDuration      :  5 * 60 * 1000,
+    cookie:{email:""}
+    //store: new redisStore({ host: 'localhost', port: 6379, client: client,ttl : 260}),
 }));
 
 // app.use(bodyParser.urlencoded({
@@ -82,8 +88,46 @@ else
 });
 
 
+app.post('/getdata',function(req,res){
+    console.log("Inside the getting name method")
+    console.log("  session email "+user.email)
 
-app.post('/signinbuyer',function(req,res){
+   // if(req.body.type === 'buyer')
+    sql = "select * from  userprofile where email=?";
+  //  else
+   // sql = "select name from  ownerprofile where email=?";
+
+    con.query(sql,[ user.email], function (err, result) {
+        if (err) {
+                      res.writeHead(404,{
+            'Content-Type' : 'application/json'
+           
+        });
+        res.end("Not able to connect to db")
+        console.log("Error",err)
+        }
+        else
+        {
+            // res.writeHead(202,{
+            //     'Content-Type' : 'application/json'
+            // });
+       
+            console.log("result get name",result[0].Name)
+            const data ={
+                name:result[0].Name
+            }
+         res.send(data);
+
+        }
+});
+});
+
+var user={
+    name:"",
+    email:""
+}
+
+app.post('/signinbuyer',function(req,res){ƒ
 
     //*****handle errors */ HANDLING ERROR OF SQL
     console.log("Inside the buyer sign IN page")
@@ -111,10 +155,8 @@ app.post('/signinbuyer',function(req,res){
                 'Content-Type' : 'application/json'
             })
             res.end("No data");
-
         }
         else{
-        
         // checking passwords from database
         if(req.body.password === result[0].password)
          {
@@ -124,6 +166,8 @@ app.post('/signinbuyer',function(req,res){
             })
             res.end("Success");
 
+           user.email=req.body.email;
+           // req.session.email=req.body.email;
          }
          else
          {
@@ -143,61 +187,6 @@ app.post('/signinbuyer',function(req,res){
 
 
 
-//Route to get All Books when user visits the Home Page
-app.get('/home', function(req,res){
-    console.log("Inside Home Login");    
-    res.writeHead(200,{
-        'Content-Type' : 'application/json'
-    });
-    console.log("Books : ",JSON.stringify(books));
-    res.end(JSON.stringify(books));
-    
-})
-
-//Route to handle Post Request Call - to create a new book
-app.post('/createBook',function(req,res){
-
-    console.log("Inside Create Book Post Request");
-    console.log("Req Body : ",req.body);
-    const found = books.some(el => el.BookID === req.body.bookId);
-    console.log('found:: ', found);
-    if (!found) {
-        books.push({ BookID: req.body.bookId, Title: req.body.bookName, Author: req.body.bookAuthor });
-        res.writeHead(201, {
-            'Content-Type': 'text/plain'
-        })
-        res.end("Book created"); 
-    } else {
-        res.writeHead(409, {
-            'Content-Type': 'text/plain'
-        })
-        res.end("Book Id already exists"); 
-    } 
-});
-
-//Route to handle Delete Request Call - to delete an existing book
-app.delete('/deleteBook/:id',function(req,res){
-    console.log("Inside Delete Book Request");
-    console.log("Req Body : ",req.params);
-    let originalLength = books.length;
-    for( var i = 0; i < books.length; i++){ 
-        if ( books[i].BookID === req.params.id) {
-          books.splice(i, 1);
-          break;
-        }
-     }
-     console.log("bookssss : ",books, books.length);
-     if (books.length === originalLength){
-        res.writeHead(404, {
-            'Content-Type': 'text/plain'
-        })
-        res.end("Book id not found");
-     }
-    res.writeHead(204, {
-        'Content-Type': 'text/plain'
-    })
-    res.end("Book deleted"); 
-})
 
 //start your server on port 3001
 app.listen(3001);
