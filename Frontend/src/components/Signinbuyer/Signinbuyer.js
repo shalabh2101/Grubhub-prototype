@@ -133,8 +133,7 @@ render(){
                 
 <nav class="navbar navbar-expand-lg navbar-dark primary-color">
 
-
-  <a class="navbar-brand" href="#" style ={{color:'red'}}>GRUBHUB</a>
+    <a class="navbar-brand" href="#" style ={{color:'red'}}>GRUBHUB</a>
 
 </nav>
 
@@ -143,8 +142,7 @@ render(){
                     
                 </div>
                <div className="container" style={{textAlign:'-webkit-center'}}> 
-              {/* {this.state.errormessege && <p>Not able to sign in. Please check if your password or username are correct</p>} */}
-              {/* onSubmit= {this.signInBuyerCheck} action="http://localhost:3001/signinbuyer" */}
+             
                 <form  onSubmit= {this.signInBuyerCheck} >
                    
                     { this.state.errormessege ? 
@@ -182,6 +180,6 @@ render(){
 }
 
 }
-//const Signinbuyer = connect(null,mapDispatchToProps)(Signinbuyer1);
+
 
 export default Signinbuyer;

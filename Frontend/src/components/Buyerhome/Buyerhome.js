@@ -50,19 +50,18 @@ componentDidMount=()=>{
     
     axios.post('http://localhost:3001/getdata', data)
     .then(response=>{
-       console.log("response.data.name ",response.data.name);
+       console.log("response.data.name ",response.data.Name);
        console.log("response  ",response);
        console.log("response.body", response.body)
         if(response.status === 200 ){ //why 202 and why 200 please check
             this.setState({
-                   name:response.data.name
+                   name:response.data.Name
         })  
         }
         else {
             this.setState({
                // errormessege:true,
-                    
-        })  
+     })  
        
         }
  })
@@ -130,6 +129,7 @@ componentDidMount=()=>{
 
 //render the functionality
 render(){
+    var url= "/search/" + this.state.search;
     return(
         <div>
             <br/>
@@ -138,13 +138,13 @@ render(){
                <div className="container">
             
                  {/* Search check */}
-                    {(this.state.searchcheck===2) && <p>No Search found</p>}
+                    {/* {(this.state.searchcheck===2) && <p>No Search found</p>} */}
 
                     
                     <nav class="navbar navbar-expand-lg navbar-dark primary-color">
 
                          <a class="navbar-brand" href="#" style ={{color:'red'}}>GRUBHUB</a>
-                         <NavLink to="/signupbuyer"  exact  class="navbar-brand" activeStyle={ {color:'red'}}>{this.state.name}</NavLink>
+                         <NavLink to="/userprofile"  exact  class="navbar-brand" activeStyle={ {color:'red'}}>{this.state.name}</NavLink>
                          <a class="navbar-brand"   style={{color:'blue'}} >{this.state.name}</a>
 
                     </nav>
@@ -153,9 +153,14 @@ render(){
                         <input  onChange = {this.searchChangeHandler}  type="text" className="form-control" name="Search" placeholder="Search" value={this.state.search}></input>
                     </div>
 
+                  
                     <div style={{width: '30%'}}>
-                        <button  className="btn btn-success" onClick= {this.searchHomeCheck} >Search</button>
+                    
+                    <Link to={url} >
+                        <button className="btn btn-success"  >Search</button>
+                        </Link>
                     </div>
+
                     <br/>
                     
                     <div style={{width: '30%'}}>

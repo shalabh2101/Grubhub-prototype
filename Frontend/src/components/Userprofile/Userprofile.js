@@ -3,8 +3,6 @@ import axios from 'axios';
 import { Redirect ,Link, NavLink} from 'react-router-dom'
 
 
-
-
 class Userprofile extends Component{
 
    //constructor
@@ -14,26 +12,40 @@ class Userprofile extends Component{
         //maintain the state required for this component
         this.state = {
             
+
+
                 email: "",
                 password:"",
+                phonenumber:"",
+                name:"",
                 errormessege:false,
-                shift:"",
+                messegevalue:"",
+                update:"",
                 result:"",
                 type:"buyer"//this.prop.type  from the actual front page
 
              }
     
- this.emailChangeHandler=this.emailChangeHandler.bind(this)
- this.passwordChangeHandler=this.passwordChangeHandler.bind(this)
+
+ this.passwordChangeHandler=this.passwordChangeHandler.bind(this);
+ this.phonenumberChangeHandler=this.phonenumberChangeHandler.bind(this);
+ this.nameChangeHandler=this.nameChangeHandler.bind(this);
 
         }
 
+phonenumberChangeHandler=(e)=>{
+            this.setState ({   
+                   phonenumber: e.target.value
+           })
+           }
 
-emailChangeHandler=(e)=>{
- this.setState ({   
-        email: e.target.value
-})
-}
+nameChangeHandler=(e)=>{
+            this.setState ({   
+                   name: e.target.value
+           })
+           }
+
+
 
 passwordChangeHandler=(e)=>{
     this.setState ({ 
@@ -41,36 +53,85 @@ passwordChangeHandler=(e)=>{
    })
    }
 
-signInBuyerCheck=(e)=>{
+
+   componentDidMount=()=>{
+
+    console.log("Inside the component did mount")
+    const data={
+        email:this.props.emailfromstore,
+        type:this.state.type
+    }
+    //console.log("this is email",data.email)
+    //console.log(this.props.emailfromstore)
+    axios.defaults.withCredentials = true;
+    
+    axios.post('http://localhost:3001/getdata', data)
+    .then(response=>{
+       console.log("response.data.name ",response.data.Name);
+       console.log("response  ",response);
+      
+        if(response.status === 200 ){ //why 202 and why 200 please check
+            this.setState({
+                   name:response.data.Name,
+                   email:response.data.Email,
+                   phonenumber:response.data.Phonenumber,
+                   password:response.data.Password
+        })  
+        }
+        else {
+            this.setState({
+               errormessege:true,
+               messegevalue:"User Data unabale to retrive due to DB connection issue"
+          })  
+       
+        }
+ })
+    .catch(err=>{
+
+        console.log('Search  exist in getting name:')
+    console.log('err:', err)
+    this.setState({
+        searchcheck:2,
+        errormessege:true
+    })
+    })
+
+}
+
+
+ 
+updateBuyerCheck=(e)=>{
 
     e.preventDefault();//
     const data = {
+        name: this.state.name,
         email : this.state.email,
-        password: this.state.password
+        phonenumber: this.state.phonenumber,
+        password:this.state.password
         }
         console.log(data);
 
         axios.defaults.withCredentials = true;
 
-        axios.post('http://localhost:3001/signinbuyer', data)
+        axios.post('http://localhost:3001/updatebuyer', data)
             .then(response => {
                 console.log('response::', response);
                 console.log("Status Code : ",response.status);
                // console.log('existssss:', this.exists)
-                if(response.status === 202 ){
+                if(response.status === 200 ){
                     this.setState({
                         
                            
                             errormessege:false,
                             result:response.data,
-                            shift:true
+                            update:true
                         
 
 
                 })  
                 const data=this.state.email;
               
-                console.log("Correct Credentials",response.body)
+                console.log("Correct  updation",response.body)
                 }
                 // if(response.status === 401 )
                 else {
@@ -79,20 +140,18 @@ signInBuyerCheck=(e)=>{
                             result:response.data      
 
                 })  
-                const data=" AUTHENTICATION FAILED ";
+             //   const data=" AUTHENTICATION FAILED ";
                
-                console.log("Incorrect Credentials",this.state)
+                console.log(" update  failed",this.state)
                 }
-                // else
-                // {
-                //     console.log("SECOND Incorrect Credentials",response.body)
-                // }
+               
             }).catch(err => {
-                console.log('existssss22:')
+                console.log('error in update :')
                 console.log('err:', err)
                 this.setState({
                    
-                    errormessege:true
+                    errormessege:true,
+                    messegevalue:"Error in updating the page"
                 })
             })
 
@@ -113,56 +172,64 @@ render(){
     
     return(
         <div>
-      
-     
-      
-              { this.state.shift && <Redirect to='/buyerhome'/>}
+           
             <br/>
                 <h2 style={{color: 'red',
                     marginTop: '0%',
                     marginLeft: '2%'}}>
-                    GRUBHUB
+                    User Profile Page
                 </h2>
                 
-      <nav class="navbar navbar-expand-lg navbar-dark primary-color">
+              <nav class="navbar navbar-expand-lg navbar-dark primary-color">
 
-            <a class="navbar-brand" href="#" style ={{color:'red'}}>GRUBHUB</a>
+                <a class="navbar-brand" onClick={<Redirect to ="/buyerhome"/>} style ={{color:'red'} }>GRUBHUB</a>
+                <NavLink to="/buyerhome"  exact activeStyle={ {color:'red'}}>GRUBHUB</NavLink>
 
-     </nav>
+                </nav>
 
-
-                <div>
+             <div>
                     
                 </div>
                <div className="container" style={{textAlign:'-webkit-center'}}> 
+
+               <div style={{width: '30%'}} >
+                        <label >Email:{this.state.email}</label>
+                    </div>
+                    <br/>   
              
-                <form  onSubmit= {this.signInBuyerCheck} >
+                <form  onSubmit= {this.updateBuyerCheck} >
                    
                     { this.state.errormessege ? 
-                        <p>Not able to sign in. Please check if your password or username are correct</p> 
+                        <p>{this.state.messegevalue}</p> 
                         : null}
-                    
-                    <div style={{width: '30%'}} className="form-group">
-                        <input required onChange = {this.emailChangeHandler}  type="text" className="form-control" name="email" placeholder="Email" value={this.state.email}></input>
-                    </div>
-                    <br/>
 
                     <div style={{width: '30%'}} className="form-group">
-                        <input required onChange = {this.passwordChangeHandler}  type="text" className="form-control" name="password" placeholder="Password" value={this.state.password} ></input>
+                        <input  onChange = {this.nameChangeHandler}  type="text" className="form-control" name="name" placeholder="Name" value={this.state.name}></input>
+                    </div>
+                    <br/>    
+                    
+                    {/* <div style={{width: '30%'}} className="form-group">
+                        <input required onChange = {this.emailChangeHandler}  type="text" className="form-control" name="email" placeholder="Email" value={this.state.email}></input>
+                    </div>
+                    <br/> */}
+
+                    <div style={{width: '30%'}} className="form-group">
+                        <input  onChange = {this.passwordChangeHandler}  type="text" className="form-control" name="password" placeholder="Password" value={this.state.password} ></input>
+                    </div>
+
+                    <div style={{width: '30%'}} className="form-group">
+                        <input  onChange = {this.phonenumberChangeHandler}  type="text" className="form-control" name="password" placeholder="Password" value={this.state.phonenumber} ></input>
                     </div>
                     <br/>
 
                     <div style={{width: '30%'}}>
-                        <button  className="btn btn-success" onClick= {this.signInBuyerCheck} type="submit">Sign In</button>
+                        <button  className="btn btn-success"  type="submit">Update</button>
                     </div>
                     <br/> 
-                    
-                    
-                     <div style={{width: '30%'}}>
-                        {/* <a href={<Redirect to ="/signupbuyer"/>}>Not a member?Click here for  Sign Up</a> */}
-                        <NavLink to="/signupbuyer"  exact activeStyle={ {color:'red'}}>Not a member?Click here for  Sign Up</NavLink>
-                    </div>
+                
                     <br/> 
+
+                    { this.state.update && <p>Data is successfully updated</p> }
          </form>
                 {/* <div>
       <Buyerhome email={this.state.email} type={this.state.type}></Buyerhome>

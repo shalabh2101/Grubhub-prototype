@@ -112,11 +112,12 @@ app.post('/getdata',function(req,res){
             //     'Content-Type' : 'application/json'
             // });
        
-            console.log("result get name",result[0].Name)
+            console.log("result get name",result[0])
             const data ={
+                
                 name:result[0].Name
             }
-         res.send(data);
+         res.send(result[0]);
 
         }
 });
@@ -127,16 +128,13 @@ var user={
     email:""
 }
 
-app.post('/signinbuyer',function(req,res){ƒ
+app.post('/signinbuyer',function(req,res){
 
     //*****handle errors */ HANDLING ERROR OF SQL
     console.log("Inside the buyer sign IN page")
     
     console.log(req.body)
-  
-
      sql = "select password from  userprofile where email=?";
-    
     con.query(sql,[req.body.email], function (err, result) {
     if (err) 
       {res.writeHead(404,{
@@ -158,6 +156,7 @@ app.post('/signinbuyer',function(req,res){ƒ
         }
         else{
         // checking passwords from database
+       // console.log("result[0].Password ",result[0]);
         if(req.body.password === result[0].password)
          {
               //##########return code for successful login
@@ -186,6 +185,68 @@ app.post('/signinbuyer',function(req,res){ƒ
 
 
 
+//update the buyer information from profile page
+    app.post('/updatebuyer',function(req,res){
+
+        //*****handle errors */ HANDLING ERROR OF SQL
+        console.log("Inside the update buyer backend page")
+        
+        console.log(req.body)
+         sql = "update userprofile set name=?, phonenumber=?,password=? where email=?";
+        con.query(sql,[req.body.name,req.body.phonenumber,req.body.password,req.body.email], function (err, result) {
+        if (err) 
+          {res.writeHead(404,{
+            'Content-Type' : 'application/json'
+           
+        });
+        res.end("Not able to connect to db--update buyer")
+        console.log("Error",err)
+        }
+        else
+        {
+            console.log(" result is "+result+'end'+'  rres legth'+result.length);
+            res.writeHead(200,{
+                'Content-Type' : 'application/json'
+               
+            });
+            res.end("Success");
+        }
+        
+       
+    
+        });
+        
+        });
+
+
+  //Food Search
+    app.post('/searchfood',function(req,res){
+
+        //*****handle errors */ HANDLING ERROR OF SQL
+        console.log("Inside the searchfood  backend page")
+        
+        console.log(req.body)
+         sql = "select Item.Rid as Id,Restaurent.name as resname,Item.Name as itemname,Cuisine from Item inner join Restaurent on Item.Rid=Restaurent.Rid where Item.Name=?"
+        con.query(sql,[req.body.food], function (err, result) {
+        if (err) 
+          {res.writeHead(404,{
+            'Content-Type' : 'application/json'
+           
+        });
+        res.end("Not able to connect to db--update buyer")
+        console.log("Error",err)
+        }
+        else
+        {   console.log("checking")
+            console.log(result);
+            res.send(result);
+        }
+        
+       
+    
+        });
+        
+        });    
 
 
 //start your server on port 3001
