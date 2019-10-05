@@ -242,12 +242,91 @@ app.post('/signinbuyer',function(req,res){
             res.send(result);
         }
         
-       
-    
-        });
+     });
         
-        });    
+});    
 
+
+
+
+        app.post('/getrestaurentmenu',function(req,res){
+
+            //*****handle errors */ HANDLING ERROR OF SQL
+            console.log("Inside the searchfood  backend page")
+            
+            var result1check;
+            var result2check;
+            var result3check;
+
+            console.log(req.body)
+            sql="select ItemId, Item.Rid as Rid,Item.Name as name,Price as price from Item inner join Restaurent on Item.Rid=Restaurent.Rid where Sections=? and Item.Rid=?"; 
+            con.query(sql,[req.body.type,req.body.id], function (err, result) {
+            if (err) {
+            //   {res.writeHead(404,{
+            //     'Content-Type' : 'application/json'
+               
+            // });
+            res.end("Not able to connect to db--update buyer")
+            console.log("Error",err)
+            }
+            else
+            {   console.log("breakfast Success")
+                 result1=result;
+                 result1check=true;
+                 console.log(result);
+                 res.send(result) 
+        
+             }   
+            }) ;
+            
+//             sql="select ItemId, Item.Rid as Rid,Item.Name as name,Price as price from Item inner join Restaurent on Item.Rid=Restaurent.Rid where Sections='lunch' and Item.Rid=?"; 
+//              con.query(sql,[req.body.id], function (err, result) {
+//              if (err) {
+//             //    {res.writeHead(404,{
+//             //      'Content-Type' : 'application/json'
+                
+//             //  });
+//              res.end("Not able to connect to db--update buyer")
+//              console.log("Error",err)
+//              }
+//              else
+//              {   console.log("breakfast Success")
+//                   result2=result;  console.log(result2);
+//               }   
+//             });
+
+//               sql="select ItemId, Item.Rid as Rid,Item.Name as name,Price as price from Item inner join Restaurent on Item.Rid=Restaurent.Rid where Sections='dinner' and Item.Rid=?"; 
+//               con.query(sql,[req.body.id], function (err, result) {
+//               if (err) {
+//             //     {res.writeHead(404,{
+//             //       'Content-Type' : 'application/json'
+                 
+//             //   });
+//               res.end("Not able to connect to db--update buyer")
+//               console.log("Error",err)
+//               }
+//               else
+//               {   console.log("breakfast Success")
+//                    result3=result;
+//                    console.log(result3);
+//                 }   
+//             });
+//             // sql="select ItemId, Item.Rid as Rid,Iten.Name as name,Price as price from Item inner join Restaurent on Item.Rid=Restaurent.Rid where section='breakfast' and Rid=?"; 
+ 
+//          let data=
+//         {
+
+//            breakfast:result1,
+//            lunch:result2,
+//            dinner:result3
+//         }
+//         console.log("data is")
+// console.log(data);
+//             res.send(data) 
+        
+            
+            
+            });    
 
 //start your server on port 3001
 app.listen(3001);

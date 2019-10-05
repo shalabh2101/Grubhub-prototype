@@ -4,7 +4,8 @@ import Signupbuyer from './Signupbuyer/Signupbuyer';
 import Signinbuyer from './Signinbuyer/Signinbuyer';
 import Buyerhome from './Buyerhome/Buyerhome';
 import Userprofile from './Userprofile/Userprofile';
-import Search from './Search/Search'
+import Search from './Search/Search';
+import Restaurent from './Restaurent/Restaurent';
 
 //Create a Main Component
 class Main extends Component {
@@ -18,6 +19,7 @@ class Main extends Component {
                 <Route path="/buyerhome"  exact component={Buyerhome}/>
                 <Route path ="/userprofile" exact component={Userprofile}/>
                 <Route path="/search/:food" exact component ={Search}/>
+                <Route path="/restaurent/:id" exact component ={Restaurent}/>
     
             </div>
         )

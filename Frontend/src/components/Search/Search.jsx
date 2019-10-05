@@ -111,19 +111,32 @@ class Search extends Component{
                              <a class="navbar-brand"   style={{color:'blue'}} >{this.state.name}</a>
     
                         </nav>
+                        {/* <Table.Row  key={fooditem.Id}>
+                <Table.Cell to="/restaurent/${fooditems.Id}">
+                
+                
+                {}
+                
+                </Table.Cell>
+                <Table.Cell>{fooditem.Cuisine}</Table.Cell>
+                
+              </Table.Row>), */}
 
 {/* add image too */}
           <Table.Body>  
             {this.state.fooditems.map( (fooditem) =>
-              (<Table.Row  key={fooditem.Id}>
-                <Table.Cell>
-                <Link to="/restaurent/${fooditems.Id}">
-                {fooditem.resname}
-                </Link>
-                </Table.Cell>
-                <Table.Cell>{fooditem.Cuisine}</Table.Cell>
                 
-              </Table.Row>),
+              
+                <tr key={fooditem.id}>
+                
+                   <Link to={`/restaurent/${fooditem.Id}` } className="Link" exact  class="navbar-brand" activeStyle={ {color:'red'}}>
+                       <td > {fooditem.Id}</td>
+                       <td>{fooditem.Cuisine}</td>  
+                       <td>  {fooditem.resname}  </td>
+
+                   </Link>
+                </tr>
+              
             )} 
           </Table.Body>
     

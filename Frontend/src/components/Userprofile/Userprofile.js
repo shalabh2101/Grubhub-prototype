@@ -11,9 +11,6 @@ class Userprofile extends Component{
         super(props);
         //maintain the state required for this component
         this.state = {
-            
-
-
                 email: "",
                 password:"",
                 phonenumber:"",
@@ -23,8 +20,7 @@ class Userprofile extends Component{
                 update:"",
                 result:"",
                 type:"buyer"//this.prop.type  from the actual front page
-
-             }
+  }
     
 
  this.passwordChangeHandler=this.passwordChangeHandler.bind(this);
@@ -45,16 +41,13 @@ nameChangeHandler=(e)=>{
            })
            }
 
-
-
 passwordChangeHandler=(e)=>{
     this.setState ({ 
             password: e.target.value
    })
    }
 
-
-   componentDidMount=()=>{
+componentDidMount=()=>{
 
     console.log("Inside the component did mount")
     const data={
@@ -98,8 +91,6 @@ passwordChangeHandler=(e)=>{
 
 }
 
-
- 
 updateBuyerCheck=(e)=>{
 
     e.preventDefault();//
