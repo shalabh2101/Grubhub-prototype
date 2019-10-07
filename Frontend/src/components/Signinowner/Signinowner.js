@@ -1,18 +1,11 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import { Redirect ,Link, NavLink} from 'react-router-dom'
-import Reduxcomponent from '../Reduxcomponent';
-import { connect } from "react-redux";
-import { checklogin } from "../../actions/index.js";
-import Buyerhome from "../Buyerhome/Buyerhome";
 
-// function mapDispatchToProps(dispatch) {
-//     return {
-//         checklogin: data => dispatch(checklogin(data))
-//     }
-// }
 
-class Signinbuyer extends Component{
+
+
+class Signinowner extends Component{
 
    //constructor
     constructor(props){
@@ -26,7 +19,7 @@ class Signinbuyer extends Component{
                 errormessege:false,
                 shift:"",
                 result:"",
-                type:"buyer"//this.prop.type  from the actual front page
+                type:"owner"//this.prop.type  from the actual front page
 
              }
     
@@ -54,7 +47,8 @@ signInBuyerCheck=(e)=>{
     const data = {
         email : this.state.email,
         password: this.state.password,
-        type:'buyer'
+
+        type:"owner"
         }
         console.log(data);
 
@@ -91,10 +85,7 @@ signInBuyerCheck=(e)=>{
                
                 console.log("Incorrect Credentials",this.state)
                 }
-                // else
-                // {
-                //     console.log("SECOND Incorrect Credentials",response.body)
-                // }
+               
             }).catch(err => {
                 console.log('existssss22:')
                 console.log('err:', err)
@@ -108,12 +99,6 @@ signInBuyerCheck=(e)=>{
 
 
 
-//functions for connecting backend
-//password
-//a new second field of password can be made, in which chek can be applied of password matchjng, then the condition of alpha numeric and more
-
-//render the functionality
-
 
 
 
@@ -122,9 +107,7 @@ render(){
     return(
         <div>
       
-     
-      
-              { this.state.shift && <Redirect to='/buyerhome'/>}
+              { this.state.shift && <Redirect to='/ownerhome'/>}
             <br/>
                 <h2 style={{color: 'red',
     marginTop: '0%',
@@ -161,14 +144,15 @@ render(){
                     <br/>
 
                     <div style={{width: '30%'}}>
-                        <button  className="btn btn-success" onClick= {this.signInBuyerCheck} type="submit">Sign In</button>
+                        <button  className="btn btn-success" onClick= {this.signInOwnerheck} type="submit">Sign In</button>
                     </div>
                     <br/> 
                     
                     
                      <div style={{width: '30%'}}>
                         {/* <a href={<Redirect to ="/signupbuyer"/>}>Not a member?Click here for  Sign Up</a> */}
-                        <NavLink to="/signupbuyer"  exact activeStyle={ {color:'red'}}>Not a member?Click here for  Sign Up</NavLink>
+                        <NavLink to="/signupowner"  exact activeStyle={ {color:'red'}}>Already a Member?Click here for  Sign In</NavLink>
+                        {/* //provide link to home page */}
                     </div>
                     <br/> 
          </form>
@@ -183,4 +167,4 @@ render(){
 }
 
 
-export default Signinbuyer;
+export default Signinowner;

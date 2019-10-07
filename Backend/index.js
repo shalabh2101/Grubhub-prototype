@@ -62,10 +62,17 @@ app.post('/signupbuyer',function(req,res){
 //*****handle errors */ HANDLING ERROR OF SQL
 console.log("Inside the buyer sign up page")
 
-console.log(req.body)
-var sql = "INSERT INTO userprofile VALUES (0,?,?,?)";
 
-con.query(sql,[req.body.name,req.body.email,req.body.password], function (err, result) {
+
+console.log(req.body)
+
+if(req.body.type==='buyer')
+     sql = "INSERT INTO userprofile VALUES (0,?,?,?)";
+     else
+     sql = "INSERT INTO ownerprofile VALUES (0,?,null,null,null,?,?,null,null)";
+
+
+con.query(sql,[req.body.name,req.body.password,req.body.email,], function (err, result) {
 if (err) 
   {res.writeHead(404,{
     'Content-Type' : 'application/json'
@@ -131,10 +138,13 @@ var user={
 app.post('/signinbuyer',function(req,res){
 
     //*****handle errors */ HANDLING ERROR OF SQL
-    console.log("Inside the buyer sign IN page")
-    
-    console.log(req.body)
+    console.log("Inside the buyer sign IN page");
+     console.log(req.body);
+    if(req.body.type==='buyer')
      sql = "select password from  userprofile where email=?";
+     else
+     sql = "select password from  ownerprofile where email=?";
+
     con.query(sql,[req.body.email], function (err, result) {
     if (err) 
       {res.writeHead(404,{
@@ -233,8 +243,9 @@ app.post('/signinbuyer',function(req,res){
             'Content-Type' : 'application/json'
            
         });
-        res.end("Not able to connect to db--update buyer")
         console.log("Error",err)
+        res.end("Not able to connect to db--update buyer")
+       
         }
         else
         {   console.log("checking")
@@ -259,15 +270,16 @@ app.post('/signinbuyer',function(req,res){
             var result3check;
 
             console.log(req.body)
-            sql="select ItemId, Item.Rid as Rid,Item.Name as name,Price as price from Item inner join Restaurent on Item.Rid=Restaurent.Rid where Sections=? and Item.Rid=?"; 
+            sql="select ItemId, Item.Rid as Rid,Item.Name as name,Price as price ,Quantity as quantity from Item inner join Restaurent on Item.Rid=Restaurent.Rid  where Sections=? and Item.Rid=?"; 
             con.query(sql,[req.body.type,req.body.id], function (err, result) {
             if (err) {
             //   {res.writeHead(404,{
             //     'Content-Type' : 'application/json'
                
             // });
-            res.end("Not able to connect to db--update buyer")
             console.log("Error",err)
+            res.end("Not able to connect to db--update buyer")
+         
             }
             else
             {   console.log("breakfast Success")

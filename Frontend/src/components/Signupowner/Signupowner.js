@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Redirect ,Link, NavLink} from 'react-router-dom'
 
 
-class Signupbuyer extends Component{
+class Signupowner extends Component{
 
 //constructor
     constructor(props){
@@ -14,6 +14,7 @@ class Signupbuyer extends Component{
             name : "",
             email: "",
             password:"",
+            success:false,
         }
 
  this.nameChangeHandler=this.nameChangeHandler.bind(this)
@@ -51,7 +52,7 @@ signUpBuyerCheck=(e)=>{
         name : this.state.name,
         email : this.state.email,
         password: this.state.password,
-        type:'buyer'
+        type:'owner'
         }
 
         axios.defaults.withCredentials = true;
@@ -63,7 +64,8 @@ signUpBuyerCheck=(e)=>{
                // console.log('existssss:', this.exists)
                 if(response.status === 200 ){
                     this.setState({
-                        result : response.data
+                        result : response.data,
+                         success:true
                 })  
                 console.log("chekcing the data",response.body)
                 }
@@ -86,6 +88,8 @@ signUpBuyerCheck=(e)=>{
 render(){
     return(
         <div>
+
+        {this.state.success && <Redirect to="/signinowner"/>}
             <br/>
             <div class="container">
                 <form onSubmit= {this.signUpBuyerCheck}>
@@ -113,7 +117,7 @@ render(){
 
                     <div style={{width: '30%'}}>
                         {/* <a href={<Redirect to ="/signupbuyer"/>}>Not a member?Click here for  Sign Up</a> */}
-                        <NavLink to="/signinbuyer"  exact activeStyle={ {color:'red'}}>Not a member?Click here for  Sign In</NavLink>
+                        <NavLink to="/signinowner"  exact activeStyle={ {color:'red'}}>Not a member?Click here for  Sign In</NavLink>
                     </div>
                     <br/> 
                    
@@ -130,4 +134,4 @@ render(){
 
 }
 
-export default Signupbuyer;
+export default Signupowner;
