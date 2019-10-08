@@ -4,7 +4,7 @@ import { Redirect ,Link, NavLink} from 'react-router-dom'
 
 import { Table, Menu, Icon, Button } from 'semantic-ui-react';
 import { isNull } from 'util';
-import { compose } from '../../../../../../../Library/Caches/typescript/3.5/node_modules/redux';
+
 
 
 class Restaurent extends Component {
@@ -18,6 +18,7 @@ class Restaurent extends Component {
     
             this.state = {
                 
+              ordersuccess:false,
                errormessege:false,
                breakfast:[],
                lunch:[],
@@ -29,6 +30,9 @@ class Restaurent extends Component {
                quan:[],
                total:[],
                cart:[],
+               globaltotal:0,
+               cartvalue:""
+
                
              }
 
@@ -43,6 +47,13 @@ class Restaurent extends Component {
     
 
     componentWillMount=()=>{
+
+      this.setState({
+        ordersuccess:false}
+      )
+
+
+      
         console.log("calling");
 var i;
         for(i=0;i<1000;i++)
@@ -166,6 +177,11 @@ var i;
 cartcheck=(val1,val2,val3,val4)=>
 {
  
+var v1=parseInt(val3);
+var v2=parseInt(val4);
+var v3=v1*v2;
+
+
   if(val4 !==0)
   {
 const data={
@@ -173,18 +189,32 @@ const data={
   ItemId:val1,
    name : val2,
    price: val3,
-   quantity:val4
+   quantity:val4,
+   total:v3
+
 
 }
 
-var newcart= this.state.cart;
+var newcart=this.state.cart;
 newcart.push(data)
+var temp= this.state.cartvalue;
+temp= temp="/"+val2+","+val3+","+val4 ;
+
+
+
+ var Gtotal=this.state.globaltotal
+Gtotal+=v3;
+
+
 
 this.setState(
 
   {
-    cart:newcart,
-    cartcheck:true
+   cart:newcart,
+    cartcheck:true,
+    cartvalue:temp,
+    globaltotal:Gtotal
+
   }
 
 
@@ -213,6 +243,49 @@ findindex=(data,index)=>{
 
       console.log("num  ",num)
       return mainindex;
+}
+
+checkouthandler=()=>{
+
+
+  axios.defaults.withCredentials = true;
+
+       
+  const data={
+  
+   order:this.state.cartvalue
+  }
+
+  axios.post('http://localhost:3001/postorder/', data)
+  .then(response=>{
+    
+     console.log("response  ",response);
+     console.log(response.data)
+      if(response.status === 200 ){ 
+
+          console.log("Updating order state");
+          if( isNull(response.data))
+             {console.log("order is null")}
+          this.setState({
+                 cart:"",    
+                 ordersuccess:true
+      })   }
+      else
+         {console.log("something not right")}
+
+})
+  .catch(err=>{
+      console.log('Restaurent  catch error: 1')
+  console.log('err:', err)
+  this.setState({
+       errormessege:true
+  })
+  });
+
+
+
+
+
 }
 
 addquantitycheck=(val1)=>
@@ -248,6 +321,7 @@ deletequantitycheck=(val1)=>
   console.log(val1);
   //console.log(val2);
  console.log(this.state.quan[val1]);
+
 }
 
 
@@ -260,6 +334,7 @@ deletequantitycheck=(val1)=>
         return(
             <div>
                 <br/>
+                {this.state.ordersuccess && <Redirect to="/ownerhome" />}
                 {this.state.logout && <Redirect to='/signinbuyer'/>}
                
                    <div className="container">
@@ -334,46 +409,40 @@ deletequantitycheck=(val1)=>
                
              </Table.Row>),
      )} 
-
      </Table.Body>
                        
-
-
-             <div>
+   <div>
                <h2>Cart</h2>
         {!this.state.cartcheck && <p>Your cart is empty</p>}
            {/* //  { this.state.cartcheck && this.Cartdisplay} */}
-
-{this.state.cartcheck &&
-
-  this.state.cart.map( (cart) =>
+   {this.state.cartcheck &&
+   this.state.cart.map( (cart) =>
+             
               (<Table.Row  key={cart.ItemId}>
- 
-               <Table.Cell>{cart.name} </Table.Cell>
+                
+              <Table.Cell>{cart.name} </Table.Cell>
                <Table.Cell>{cart.price}</Table.Cell>
              
                <Table.Cell>    {cart.quantity}</Table.Cell>
-               
+               <Table.Cell>{cart.total}</Table.Cell>
              </Table.Row>),
+
+            
      )
 
+      
+
+
 }
+
+<p>{this.state.globaltotal}</p>
+
+{this.state.cartcheck && <button onClick={()=>this.checkouthandler }>Check Out</button>}
 
 )
 
 
-
-
-
-
-
-
-                 
-
-
-
              </div>          
-                        
                         <div style={{width: '30%'}}>
                             <button  className="btn btn-success"  >Log out</button>
                         </div>
