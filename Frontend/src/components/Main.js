@@ -10,11 +10,12 @@ import Signinowner from './Signinowner/Signinowner';
 import Signupowner from './Signupowner/Signupowner';
 import Ownerprofile from './Ownerprofile/Ownerprofile';
 import Mainpage from './Mainpage/Mainpage';
+import Ownerhome from './Ownerhome/Ownerhome';
 
 //Create a Main Component
 class Main extends Component {
     render(){
-        return(
+        return( 
             <div>
                 {/*Render Different Component based on Route*/}
                 <Route path="/signupbuyer"  exact component={Signupbuyer}/>
@@ -26,7 +27,9 @@ class Main extends Component {
                 <Route path="/restaurent/:id" exact component ={Restaurent}/>
                 <Route path="/signinowner" exact component ={Signinowner}/>
                 <Route path="/signupowner" exact component ={Signupowner}/>
-                <Route path="ownerhome" exact component ={Ownerprofile}/>
+                <Route path="/ownerhome/:email" exact component ={Ownerhome}/>
+                <Route path="/ownerprofile/:email1" exact component ={Ownerprofile}/>
+    
     
             </div>
         )

@@ -28,6 +28,13 @@
   font-size: 14px;
   text-decoration: underline;
 }
+
+.example1 {
+  background: url("/Frontend/src/images/new.jpeg");
+  background-repeat: no-repeat;
+  background-size: auto;
+}
+
 .login-form  .btn.btn-primary {
   background: #f0ad4e none repeat scroll 0 0;
   border-color: #f0ad4e;

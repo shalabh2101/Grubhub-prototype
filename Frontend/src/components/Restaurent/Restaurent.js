@@ -26,15 +26,17 @@ class Restaurent extends Component {
                lunchcheck:false,
                dinnercheck:false,
                cartcheck:false,
-               quan:[]
+               quan:[],
+               total:[],
+               cart:[],
                
              }
 
             
-             this.luuchqucntitycheck=this.luuchqucntitycheck.bind(this);
+             
             this.findindex=this.findindex.bind(this);
-       // this.searchChangeHandler=this.searchChangeHandler.bind(this);
-     //   this.searchHomeCheck=this.searchHomeCheck.bind(this);
+        this.addquantitycheck=this.addquantitycheck.bind(this);
+        this.deletequantitycheck=this.deletequantitycheck.bind(this);
            }
     
           
@@ -70,6 +72,8 @@ var i;
         console.log("this is id",data1.id)
        
         axios.defaults.withCredentials = true;
+
+       
         
         axios.post('http://localhost:3001/getrestaurentmenu/', data1)
         .then(response=>{
@@ -154,14 +158,40 @@ var i;
         })
         });
     
+
+
     }
     
      
-Cartdisplay=(e,val)=>
+cartcheck=(val1,val2,val3,val4)=>
 {
-  this.state.quan[val]=this.state.quan[val]+1;
-  console.log("vaaaaaaaaaa")
- console.log(val);
+ 
+  if(val4 !==0)
+  {
+const data={
+  
+  ItemId:val1,
+   name : val2,
+   price: val3,
+   quantity:val4
+
+}
+
+var newcart= this.state.cart;
+newcart.push(data)
+
+this.setState(
+
+  {
+    cart:newcart,
+    cartcheck:true
+  }
+
+
+)
+}
+ 
+ //console.log(val);
 }
 
 findindex=(data,index)=>{
@@ -185,8 +215,10 @@ findindex=(data,index)=>{
       return mainindex;
 }
 
-luuchqucntitycheck=(val1)=>
+addquantitycheck=(val1)=>
 {  
+
+  console.log("checking handler");
   var twan=this.state.quan;
   twan[val1]=twan[val1]+1;
   console.log(val1);
@@ -200,98 +232,39 @@ luuchqucntitycheck=(val1)=>
  console.log(this.state.quan[val1]);
 }
 
+deletequantitycheck=(val1)=>
+{  
 
-// addhandler=(val1,val2,val3)=>
-// {
+  console.log("checking handler");
+  var twan=this.state.quan;
+  if(twan[val1]>0)
+  twan[val1]=twan[val1]-1;
+  console.log(val1);
+  this.setState({
+    quan:twan
+  });
+ 
+  console.log("checking handler");
+  console.log(val1);
+  //console.log(val2);
+ console.log(this.state.quan[val1]);
+}
 
-//     console.log("inside add handler")
-//     console.log(val1);
-//     console.log(val2);
-//     console.log(val3);
-//      if(val2==='breakfast')
-//          {
-//            var index=this.findindex(this.state.breakfast,val1);
-//         //    if(i!==undefined)
-//         //    {
-//         //     console.log("caught undefined")
-//         //    var index=i.ItemId;
-           
-//         //     console.log("result from findindex   oooo",i);
-//             console.log(index);
-//             if(index>=0)
-//              { console.log("hiiiii",index)
-//                  if(this.state.breakfast[index].quantity !==0)
-             
-//              { console.log("oooooooo")
-//                    let newbreakfast= JSON.parse(JSON.stringify(this.state.breakfast))
-//                    console.log(newbreakfast);
-//                    newbreakfast[index].quantity=parseInt(newbreakfast[index].quantity)+val3;
-                 
-//                 this.setState({
-//                     breakfast:newbreakfast
-//                })
-//              }
-            
-//             }
-//          }
-//          else if(val2==='lunch')
-//          {
-//            var index=this.findindex(this.state.lunch,val1);
-//         //    if(i!==undefined)
-//         //    {
-//         //     console.log("caught undefined")
-//         //    var index=i.ItemId;
-           
-//         //     console.log("result from findindex   oooo",i);
-//             console.log(index);
-//             if(index>=0)
-//              { console.log("hiiiii",index)
-//                  if(this.state.lunch[index].quantity !==0)
-             
-//              { console.log("oooooooo")
-             
-//              console.log(this.state.lunchquantity);
-//              var newlunchquantity=this.state.lunchquantity;
-//              newlunchquantity[index]= newlunchquantity[index]+1;
-
-//              console.log(newlunchquantity);
-//                   //  let newlunch= JSON.parse(JSON.stringify(this.state.lunch))
-//                   //  console.log(newlunch);
-//                   //  newlunch[index].quantity=parseInt(newlunch[index].quantity)+val3;
-//                   // console.log(" newlunch[index].quantity", newlunch[index].quantity)
-//                 this.setState({
-//                     lunchquantity:newlunchquantity
-//                });
-//                console.log(this.state);
-//              }
-            
-//             }
-//          }
-// }
 
 
 
 
     render()
     {
-      
-             
-        
-        
-       const Squar = ({ number }) => <p>{number +" done"}</p>;
-       const Rect=({number})=>  <p>{number +'okok'}</p>;
+  
         return(
             <div>
                 <br/>
                 {this.state.logout && <Redirect to='/signinbuyer'/>}
                
                    <div className="container">
-                
-                     {/* Search check */}
-                        {/* {(this.state.searchcheck===2) && <p>No Search found</p>} */}
-    
-                        
-                        <nav class="navbar navbar-expand-lg navbar-dark primary-color">
+            
+                 <nav class="navbar navbar-expand-lg navbar-dark primary-color">
     
                              <a class="navbar-brand" href="#" style ={{color:'red'}}>GRUBHUB</a>
                              <NavLink to="/userprofile"  exact  class="navbar-brand" activeStyle={ {color:'red'}}>{this.state.name}</NavLink>
@@ -299,85 +272,102 @@ luuchqucntitycheck=(val1)=>
     
                         </nav>
 
+                      
 {/* //make objects from query */}
 <h2>Breakfast</h2>
-
+<Table.Body>  
          {/* add image too */}
           {/* <Table.Body>   */}
             {this.state.breakfast.map( (breakfast) =>
+
+
+            
               (<Table.Row  key={breakfast.ItemId}>
-               
-               {/* <Squar key={breakfast.ItemId} number={breakfast.name } />
-               <Table.Cell>
-               <Rect key={breakfast.ItemId} number={breakfast.name}/>,
-               </Table.Cell>
-                */}
-               
-             
-               <Table.Cell>
-                     {breakfast.name}
-               </Table.Cell>
+ 
+               <Table.Cell>{breakfast.name} </Table.Cell>
                <Table.Cell>{breakfast.price}</Table.Cell>
+               <Table.Cell>    <button  onClick={()=>this.deletequantitycheck(breakfast.ItemId)}>Delete</button> </Table.Cell>
+                <Table.Cell>   <button onClick={()=>this.addquantitycheck(breakfast.ItemId)}>Add</button>  </Table.Cell>
+               <Table.Cell>    {this.state.quan[breakfast.ItemId]}</Table.Cell>
+               <Table.Cell>    </Table.Cell> 
+               <Table.Cell>    <button  onClick={()=>this.cartcheck(breakfast.ItemId,breakfast.name,breakfast.price,this.state.quan[breakfast.ItemId])}>Add To cart</button> </Table.Cell>
 
-               {/* <Table.Cell>     <button onClick={this.addhandler} >Add</button></Table.Cell> */}
-               
-               {/* <Table.Cell>     <input  placeholder="Quantity" inputname="quan" > </input></Table.Cell> */}
-               <Table.Cell>    <button>Delete</button> </Table.Cell>
-               {/* <input onChange={this.luuchqucntitycheck(breakfast.ItemId)}  placeholder="Quantity" name="quan" value=''/>  */}
-               <button onclick={this.luuchqucntitycheck(breakfast.ItemId)}>Add</button>
-               <Table.Cell>    {this.quan[breakfast.ItemId]}</Table.Cell>
-               
              </Table.Row>),
+     )} 
 
-
-            )} 
-          {/* </Table.Body> */}
+     </Table.Body>
+       
 
 
     <h2>Lunch</h2>      
-
     <Table.Body>  
+         {/* add image too */}
+          {/* <Table.Body>   */}
             {this.state.lunch.map( (breakfast) =>
-                
-            
               (<Table.Row  key={breakfast.ItemId}>
+ 
+               <Table.Cell>{breakfast.name} </Table.Cell>
+               <Table.Cell>{breakfast.price}</Table.Cell>
+               <Table.Cell>    <button  onClick={()=>this.deletequantitycheck(breakfast.ItemId)}>Delete</button> </Table.Cell>
+                <Table.Cell>   <button onClick={()=>this.addquantitycheck(breakfast.ItemId)}>Add</button>  </Table.Cell>
+               <Table.Cell>    {this.state.quan[breakfast.ItemId]}</Table.Cell>
                
-                 <Table.Cell>
-                      {breakfast.name}
-                </Table.Cell>
-                <Table.Cell>{breakfast.price}</Table.Cell>
+             </Table.Row>),
+     )} 
 
-                {/* <Table.Cell> <button onClick={this.addhandler(breakfast.ItemId,"lunch",1)} >Add</button></Table.Cell> */}
-                <Table.Cell>    <button>Delete</button> </Table.Cell>
-                
-              </Table.Row>),
-            )} 
-          </Table.Body>
+     </Table.Body>
+
+
     <h2>Dinner</h2>
 
-    <Table.Body>  
+ <Table.Body>  
+         {/* add image too */}
+          {/* <Table.Body>   */}
             {this.state.dinner.map( (breakfast) =>
-                
-            
               (<Table.Row  key={breakfast.ItemId}>
-                <Table.Cell>
-                      {breakfast.name}
+ 
+               <Table.Cell>{breakfast.name} </Table.Cell>
+               <Table.Cell>{breakfast.price}</Table.Cell>
+               <Table.Cell>    <button  onClick={()=>this.deletequantitycheck(breakfast.ItemId)}>Delete</button> </Table.Cell>
+                <Table.Cell>   <button onClick={()=>this.addquantitycheck(breakfast.ItemId)}>Add</button>  </Table.Cell>
+               <Table.Cell>    {this.state.quan[breakfast.ItemId]}</Table.Cell>
                
-                </Table.Cell>
-                <Table.Cell>{breakfast.price}</Table.Cell>
-                <button>Add</button>
-                <button>Delete</button>
+             </Table.Row>),
+     )} 
 
-              </Table.Row>),
-            )} 
-          </Table.Body>
+     </Table.Body>
                        
 
 
              <div>
                <h2>Cart</h2>
         {!this.state.cartcheck && <p>Your cart is empty</p>}
-             { this.state.cartcheck && this.Cartdisplay}
+           {/* //  { this.state.cartcheck && this.Cartdisplay} */}
+
+{this.state.cartcheck &&
+
+  this.state.cart.map( (cart) =>
+              (<Table.Row  key={cart.ItemId}>
+ 
+               <Table.Cell>{cart.name} </Table.Cell>
+               <Table.Cell>{cart.price}</Table.Cell>
+             
+               <Table.Cell>    {cart.quantity}</Table.Cell>
+               
+             </Table.Row>),
+     )
+
+}
+
+)
+
+
+
+
+
+
+
+
                  
 
 
@@ -399,4 +389,11 @@ luuchqucntitycheck=(val1)=>
 } 
     export default Restaurent;
 
+    
+
+    //multer
+    //session managementy
+    //report
+    //aws deployemmt
+    //jmeter
     

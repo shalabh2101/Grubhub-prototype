@@ -60,19 +60,42 @@ app.use(function(req, res, next) {
 app.post('/signupbuyer',function(req,res){
 
 //*****handle errors */ HANDLING ERROR OF SQL
-console.log("Inside the buyer sign up page")
+console.log("Inside the buyer/owner sign up page")
 
-
+console.log("resname", req.body.resname);
+console.log("resname", req.body.reszipcode);
 
 console.log(req.body)
 
 if(req.body.type==='buyer')
-     sql = "INSERT INTO userprofile VALUES (0,?,?,?)";
+    { sql = "INSERT INTO userprofile VALUES (0,?,?,?)";
+
+    con.query(sql,[req.body.name,req.body.password,req.body.email] ,function (err, result) {
+        if (err) 
+          {res.writeHead(404,{
+            'Content-Type' : 'application/json'
+           
+        });
+        res.end("Not able to connect to db")
+        console.log("Error",err)
+        }
+        else
+        {
+            res.writeHead(200,{
+                'Content-Type' : 'application/json'
+            })
+            res.end("Inserted");
+            console.log("1 record inserted");
+        }
+        
+        });
+}
+
      else
-     sql = "INSERT INTO ownerprofile VALUES (0,?,null,null,null,?,?,null,null)";
+   {  sql = "INSERT INTO ownerprofile VALUES (0,?,?,null,null,?,?,null,null)";
 
 
-con.query(sql,[req.body.name,req.body.password,req.body.email,], function (err, result) {
+con.query(sql,[req.body.name,req.body.resname,req.body.password,req.body.resname], function (err, result) {
 if (err) 
   {res.writeHead(404,{
     'Content-Type' : 'application/json'
@@ -92,6 +115,8 @@ else
 
 });
 
+   }
+
 });
 
 
@@ -99,10 +124,12 @@ app.post('/getdata',function(req,res){
     console.log("Inside the getting name method")
     console.log("  session email "+user.email)
 
-   // if(req.body.type === 'buyer')
-    sql = "select * from  userprofile where email=?";
-  //  else
-   // sql = "select name from  ownerprofile where email=?";
+    console.log("req body  ",req.body)
+
+
+    if(req.body.type === 'buyer')
+     { sql = "select * from  userprofile where email=?";
+   
 
     con.query(sql,[ user.email], function (err, result) {
         if (err) {
@@ -128,7 +155,50 @@ app.post('/getdata',function(req,res){
 
         }
 });
+
+     }
+     else
+{
+    
+      sql = "select * from  grubhubmain.ownerprofile where email=?";
+
+      con.query(sql,[ req.body.email], function (err, result) {
+        if (err) {
+                      res.writeHead(404,{
+            'Content-Type' : 'application/json'
+           
+        });
+        res.end("Not able to connect to db")
+        console.log("Error",err)
+        }
+        else
+        {
+            // res.writeHead(202,{
+            //     'Content-Type' : 'application/json'
+            // });
+       
+            console.log("result get name",result[0])
+            if( result[0] === undefined )
+            { res.end("No data found");
+            console.log("no data")
+        }
+            else{
+            const data ={
+                
+                name:result[0].Name
+            }
+         res.send(result[0]);}
+
+        }
 });
+
+     
+
+
+
+
+}
+    });
 
 var user={
     name:"",

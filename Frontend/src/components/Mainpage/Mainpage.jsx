@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import { Redirect ,Link, NavLink} from 'react-router-dom'
-
+import Background from '../../images/new.jpeg';
 
 class Mainpage extends Component{
 
@@ -15,7 +15,32 @@ class Mainpage extends Component{
 
 render(){
     return(
-        <div>
+
+<div>
+
+
+
+
+<br/>
+                <h2 style={{color: 'red',
+    marginTop: '0%',
+    marginLeft: '2%'}}>
+                    GRUBHUB
+                </h2>
+                
+<nav class="navbar navbar-expand-lg navbar-dark primary-color" >
+
+    <a class="navbar-brand" href="#" style ={{color:'red'}}>GRUBHUB</a>
+
+</nav>
+        
+<div style ={{backgroundImage: `url(${Background})`,
+height: '400px'}}>
+
+
+</div>
+
+        <div >
 
          <div style={{width: '30%'}} class="form-group">
        <button>
@@ -31,7 +56,7 @@ render(){
 
         <div style={{width: '30%'}} class="form-group">
        <button>
-              <NavLink to="/signinowner"  exact activeStyle={ {color:'red'}}> Restaurent Owner Sign Ip</NavLink>
+              <NavLink to="/signinowner"  exact activeStyle={ {color:'red'}}> Restaurent Owner Sign In</NavLink>
        </button>    
        </div>   
 
@@ -44,6 +69,8 @@ render(){
                    
 
                
+            </div>
+
             </div>
         
     )

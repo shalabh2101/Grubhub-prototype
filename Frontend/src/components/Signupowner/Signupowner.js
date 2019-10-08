@@ -14,23 +14,40 @@ class Signupowner extends Component{
             name : "",
             email: "",
             password:"",
+            resname :"",
+            reszipcode:"",
             success:false,
         }
 
- this.nameChangeHandler=this.nameChangeHandler.bind(this)
- this.emailChangeHandler=this.emailChangeHandler.bind(this)
- this.passwordChangeHandler=this.passwordChangeHandler.bind(this)
+ this.nameChangeHandler=this.nameChangeHandler.bind(this);
+ this.emailChangeHandler=this.emailChangeHandler.bind(this);
+ this.passwordChangeHandler=this.passwordChangeHandler.bind(this);
+ this.resnameChangeHandler=this.resnameChangeHandler.bind(this);
+ this.reszipcodeChangeHandler=this.reszipcodeChangeHandler.bind(this);
 
-       
     }
 
+    resnameChangeHandler=(e)=>{
+        this.setState ({
+       resname: e.target.value
+       })
+       }
 
+       reszipcodeChangeHandler=(e)=>{
+        this.setState ({
+       reszipcode: e.target.value
+       })
+       }
 
 
 emailChangeHandler=(e)=>{
  this.setState ({
 email: e.target.value
+
+
 })
+
+
 }
 
 nameChangeHandler=(e)=>{
@@ -52,6 +69,8 @@ signUpBuyerCheck=(e)=>{
         name : this.state.name,
         email : this.state.email,
         password: this.state.password,
+        resname:this.state.resname,
+        reszipcode:this.state.reszipcode,
         type:'owner'
         }
 
@@ -106,6 +125,16 @@ render(){
 
                     <div style={{width: '30%'}} class="form-group">
                         <input required onChange = {this.passwordChangeHandler}  type="text" class="form-control" name="password" placeholder="Password"/>
+                    </div>
+                    <br/>
+
+                    <div style={{width: '30%'}} class="form-group">
+                        <input required onChange = {this.resnameChangeHandler}  type="text" class="form-control" name="resname" placeholder="Restaurent Name"/>
+                    </div>
+                    <br/>
+
+                    <div style={{width: '30%'}} class="form-group">
+                        <input required onChange = {this.reszipcodeChangeHandler}  type="text" class="form-control" name="reszipcode" placeholder="Zipcode"/>
                     </div>
                     <br/>
 

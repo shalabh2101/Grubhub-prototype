@@ -19,15 +19,41 @@ class Ownerprofile extends Component{
                 messegevalue:"",
                 update:"",
                 result:"",
-                type:"buyer"//this.prop.type  from the actual front page
+                resname:"",
+                reszipcode:"",
+                cuisine:"",
+                type:"owner"//this.prop.type  from the actual front page
   }
     
 
  this.passwordChangeHandler=this.passwordChangeHandler.bind(this);
  this.phonenumberChangeHandler=this.phonenumberChangeHandler.bind(this);
  this.nameChangeHandler=this.nameChangeHandler.bind(this);
+ this.cuisineChangeHandler=this.cuisineChangeHandler.bind(this);
+ this.resnameChangeHandler=this.resnameChangeHandler.bind(this);
+ this.reszipcodeChangeHandler=this.reszipcodeChangeHandler.bind(this);
+ 
 
         }
+      
+
+        cuisineChangeHandler=(e)=>{
+            this.setState ({   
+                cuisine: e.target.value
+           })
+           }
+
+        resnameChangeHandler=(e)=>{
+            this.setState ({   
+                   resname: e.target.value
+           })
+           }
+
+        reszipcodeChangeHandler=(e)=>{
+            this.setState ({   
+                   reszipcode: e.target.value
+           })
+           }
 
 phonenumberChangeHandler=(e)=>{
             this.setState ({   
@@ -47,15 +73,21 @@ passwordChangeHandler=(e)=>{
    })
    }
 
-componentDidMount=()=>{
-
-    console.log("Inside the component did mount")
+componentWillMount=()=>{
+var Email=this.props.match.params.email1
+    console.log("Inside the component did mount",Email)
     const data={
-        email:this.props.emailfromstore,
-        type:this.state.type
+        email:this.props.match.params.email1,
+        type:"owner"
     }
+
+    this.setState({
+        email:Email
+    })
     //console.log("this is email",data.email)
     //console.log(this.props.emailfromstore)
+
+
     axios.defaults.withCredentials = true;
     
     axios.post('http://localhost:3001/getdata', data)
@@ -63,12 +95,14 @@ componentDidMount=()=>{
        console.log("response.data.name ",response.data.Name);
        console.log("response  ",response);
       
-        if(response.status === 200 ){ //why 202 and why 200 please check
+        if(response.status === 200 ){ 
             this.setState({
                    name:response.data.Name,
                    email:response.data.Email,
                    phonenumber:response.data.Phonenumber,
-                   password:response.data.Password
+                   password:response.data.Password,
+                   reszipcode:response.data.Zipcode,
+                   resname:response.data.Resname,
         })  
         }
         else {
@@ -91,7 +125,7 @@ componentDidMount=()=>{
 
 }
 
-updateBuyerCheck=(e)=>{
+updateOwnerCheck=(e)=>{
 
     e.preventDefault();//
     const data = {
@@ -188,7 +222,7 @@ render(){
                     </div>
                     <br/>   
              
-                <form  onSubmit= {this.updateBuyerCheck} >
+                <form  onSubmit= {this.updateOwnerCheck} >
                    
                     { this.state.errormessege ? 
                         <p>{this.state.messegevalue}</p> 
@@ -199,20 +233,38 @@ render(){
                     </div>
                     <br/>    
                     
-                    {/* <div style={{width: '30%'}} className="form-group">
+                    <div style={{width: '30%'}} className="form-group">
                         <input required onChange = {this.emailChangeHandler}  type="text" className="form-control" name="email" placeholder="Email" value={this.state.email}></input>
                     </div>
-                    <br/> */}
+                    <br/>
 
                     <div style={{width: '30%'}} className="form-group">
                         <input  onChange = {this.passwordChangeHandler}  type="text" className="form-control" name="password" placeholder="Password" value={this.state.password} ></input>
                     </div>
+                   
+                    <br/>
 
                     <div style={{width: '30%'}} className="form-group">
-                        <input  onChange = {this.phonenumberChangeHandler}  type="text" className="form-control" name="password" placeholder="Password" value={this.state.phonenumber} ></input>
+                        <input  onChange = {this.phonenumberChangeHandler}  type="text" className="form-control" name="Phonenumber" placeholder="Phonenumber" value={this.state.phonenumber} ></input>
+                    </div>
+                    <br/>
+                    
+                    <div style={{width: '30%'}} className="form-group">
+                        <input  onChange = {this.resnameChangeHandler}  type="text" className="form-control" name="resname" placeholder="Restaurent Name" value={this.state.resname} ></input>
                     </div>
                     <br/>
 
+                    <div style={{width: '30%'}} className="form-group">
+                        <input  onChange = {this.reszipcodeChangeHandler}  type="text" className="form-control" name="zipcode" placeholder="Zipcode" value={this.state.reszipcode} ></input>
+                    </div>
+                    <br/>
+
+                    <div style={{width: '30%'}} className="form-group">
+                        <input  onChange = {this.cuisineChangeHandler}  type="text" className="form-control" name="cuisine" placeholder="cuisine" value={this.state.cuisine} ></input>
+                    </div>
+                    <br/>
+
+                    
                     <div style={{width: '30%'}}>
                         <button  className="btn btn-success"  type="submit">Update</button>
                     </div>

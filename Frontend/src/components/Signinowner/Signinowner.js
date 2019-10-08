@@ -103,11 +103,11 @@ signInBuyerCheck=(e)=>{
 
 
 render(){
-    
+    var url= "/ownerhome/" + this.state.email;
     return(
         <div>
       
-              { this.state.shift && <Redirect to='/ownerhome'/>}
+              { this.state.shift && <Redirect to={url}/>}
             <br/>
                 <h2 style={{color: 'red',
     marginTop: '0%',
