@@ -46,8 +46,10 @@ app.use(function(req, res, next) {
     host: "localhost",
     user: "root",
     password: "password",
-    database:"grubhubmain"
+    database:"grubhub"
   });
+
+
 
   //*****handle errors */
   
@@ -202,8 +204,19 @@ app.post('/getdata',function(req,res){
 
 var user={
     name:"",
-    email:""
+    email:"",
+    id:"",
+    rid:"",
 }
+
+
+app.post('/postorder',function(req,res){
+    
+    var sql="insert into grubhub"
+
+
+});
+
 
 app.post('/signinbuyer',function(req,res){
 
@@ -211,9 +224,9 @@ app.post('/signinbuyer',function(req,res){
     console.log("Inside the buyer sign IN page");
      console.log(req.body);
     if(req.body.type==='buyer')
-     sql = "select password from  userprofile where email=?";
+     sql = "select id,password from  userprofile where email=?";
      else
-     sql = "select password from  ownerprofile where email=?";
+     sql = "select id,password from  ownerprofile where email=?";
 
     con.query(sql,[req.body.email], function (err, result) {
     if (err) 
@@ -246,6 +259,7 @@ app.post('/signinbuyer',function(req,res){
             res.end("Success");
 
            user.email=req.body.email;
+           user.id=result[0].id;
            // req.session.email=req.body.email;
          }
          else
@@ -356,7 +370,11 @@ app.post('/signinbuyer',function(req,res){
                  result1=result;
                  result1check=true;
                  console.log(result);
-                 res.send(result) 
+                 res.send(result) ;
+
+                 user.rid=result[0].Rid;
+                 console.log(user.rid);
+
         
              }   
             }) ;
