@@ -20,7 +20,7 @@ class Restaurent extends Component {
                 
               ordersuccess:false,
                errormessege:false,
-               breakfast:[],
+               breakfast:{},
                lunch:[],
                dinner:[],
                breakfastcheck:false,
@@ -31,62 +31,46 @@ class Restaurent extends Component {
                total:[],
                cart:[],
                globaltotal:0,
-               cartvalue:""
+               cartvalue:"",
+               Items:{}
 
                
              }
 
             
              
-            this.findindex=this.findindex.bind(this);
+      
         this.addquantitycheck=this.addquantitycheck.bind(this);
         this.deletequantitycheck=this.deletequantitycheck.bind(this);
-           }
+        this.checkouthandler=this.checkouthandler.bind(this);
+      
+      
+      }
     
           
     
 
     componentWillMount=()=>{
-
-      this.setState({
-        ordersuccess:false}
-      )
-
-
-      
-        console.log("calling");
+      console.log("calling");
 var i;
         for(i=0;i<1000;i++)
         this.state.quan[i]=0;
         console.log(this.state.quan);
 
-        
-    
         const Restaurentid = this.props.match.params.id;
         console.log(Restaurentid);
 
         console.log("Inside the  Restaurent component did mount")
-        const data1={
+        const data={
             id:Restaurentid,
-            type: 'breakfast'
+            type: 'buyer'
         }
 
-        const data2={
-            id:Restaurentid,
-            type: 'lunch'
-        }
-
-        const data3={
-            id:Restaurentid,
-            type: 'dinner'
-        }
-        console.log("this is id",data1.id)
+        console.log("this is id",data.id)
        
         axios.defaults.withCredentials = true;
 
-       
-        
-        axios.post('http://localhost:3001/getrestaurentmenu/', data1)
+        axios.post('http://localhost:3001/getrestaurentmenu/', data)
         .then(response=>{
           
            console.log("response  ",response);
@@ -97,8 +81,11 @@ var i;
                 if( isNull(response.data))
                    {console.log("breakfast is null")}
                 this.setState({
-                       breakfast:response.data,    
-            })   }
+                  Items:response.data,    
+            })   
+            console.log(response.data)
+          
+          }
             else
                {console.log("something not right")}
      })
@@ -110,66 +97,7 @@ var i;
         })
         });
 
-
-        axios.post('http://localhost:3001/getrestaurentmenu/', data2)
-        .then(response=>{
-          
-           console.log("response  ",response);
-           console.log(response.data)
-            if(response.status === 200 ){ 
-
-                console.log("Updating fooditems state");
-                if( isNull(response.data))
-                {console.log("lunch is null")}
-                this.setState({
-                      
-                      lunch:response.data,
-                     
-                       
-                    // lunch:JSON.parse(JSON.stringify(response.data))
-                     
-            })  
-          }
-            else
-               {console.log("something not right")}
-     })
-        .catch(err=>{
-            console.log('Restaurent  catch error:2')
-        console.log('err:', err)
-        this.setState({
-             errormessege:true
-        })
-        });
-        
-        
-
-        axios.post('http://localhost:3001/getrestaurentmenu/', data3)
-        .then(response=>{
-          
-           console.log("response  ",response);
-           console.log(response.data)
-            if(response.status === 200 ){ 
-
-                console.log("Updating fooditems state");
-                if( isNull(response.data))
-                {console.log("dinner is null")}
-                this.setState({
-                      
-                       dinner:response.data
-                     
-            })   }
-            else
-               {console.log("something not right")}
-     })
-        .catch(err=>{
-            console.log('Restaurent  catch error:3')
-        console.log('err:', err)
-        this.setState({
-             errormessege:true
-        })
-        });
     
-
 
     }
     
@@ -194,11 +122,12 @@ const data={
 
 
 }
+console.log("val1")
 
 var newcart=this.state.cart;
 newcart.push(data)
 var temp= this.state.cartvalue;
-temp= temp="/"+val2+","+val3+","+val4 ;
+temp= temp+"/"+val2+","+val3+","+val4 ;
 
 
 
@@ -210,7 +139,7 @@ Gtotal+=v3;
 this.setState(
 
   {
-   cart:newcart,
+     cart:newcart,
     cartcheck:true,
     cartvalue:temp,
     globaltotal:Gtotal
@@ -221,39 +150,39 @@ this.setState(
 )
 }
  
- //console.log(val);
+
 }
 
-findindex=(data,index)=>{
-    console.log("inside find index");
-    console.log(data);
-    var mainindex=-1
-    let num=-1;
-    num= data.find(function(item, i){
-         console.log("inside find")
-         console.log("item id", item.ItemId,"  item index",index)
+// findindex=(data,index)=>{
+//     console.log("inside find index");
+//     console.log(data);
+//     var mainindex=-1
+//     let num=-1;
+//     num= data.find(function(item, i){
+//          console.log("inside find")
+//          console.log("item id", item.ItemId,"  item index",index)
        
-         console.log("i",i)
-        if(item.ItemId === index){
-           mainindex=i;
-             return i;}
+//          console.log("i",i)
+//         if(item.ItemId === index){
+//            mainindex=i;
+//              return i;}
             
 
-      });
+//       });
 
-      console.log("num  ",num)
-      return mainindex;
-}
+//       console.log("num  ",num)
+//       return mainindex;
+// }
+
 
 checkouthandler=()=>{
-
+console.log(":inside checkout handler")
 
   axios.defaults.withCredentials = true;
 
        
   const data={
-  
-   order:this.state.cartvalue
+      order:this.state.cartvalue
   }
 
   axios.post('http://localhost:3001/postorder/', data)
@@ -264,10 +193,9 @@ checkouthandler=()=>{
       if(response.status === 200 ){ 
 
           console.log("Updating order state");
-          if( isNull(response.data))
-             {console.log("order is null")}
+         
           this.setState({
-                 cart:"",    
+                   
                  ordersuccess:true
       })   }
       else
@@ -275,16 +203,12 @@ checkouthandler=()=>{
 
 })
   .catch(err=>{
-      console.log('Restaurent  catch error: 1')
+      console.log('postorder  catch error: 1')
   console.log('err:', err)
   this.setState({
        errormessege:true
   })
   });
-
-
-
-
 
 }
 
@@ -329,12 +253,39 @@ deletequantitycheck=(val1)=>
 
 
     render()
+    {    
+
+   
+   let Restitems= Object.keys(this.state.Items).map((key)=>{
+
+      return (    
+    <Table.Body>  
+      <h2>{key}</h2>
     {
+         this.state.Items[key].map( (breakfast) =>(
   
+       <Table.Row  key={breakfast.ItemId}>
+       
+       <Table.Cell>{breakfast.name} </Table.Cell>
+       <Table.Cell>{breakfast.price}</Table.Cell>
+       <Table.Cell>    <button  onClick={()=>this.deletequantitycheck(breakfast.ItemId)}>Delete</button> </Table.Cell>
+        <Table.Cell>   <button onClick={()=>this.addquantitycheck(breakfast.ItemId)}>Add</button>  </Table.Cell>
+       <Table.Cell>    {this.state.quan[breakfast.ItemId]}</Table.Cell>
+       <Table.Cell>    </Table.Cell> 
+       <Table.Cell>    <button  onClick={()=>this.cartcheck(breakfast.ItemId,breakfast.name,breakfast.price,this.state.quan[breakfast.ItemId])}>Add To cart</button> </Table.Cell>
+
+     </Table.Row>),
+)} 
+
+</Table.Body>)
+
+})
+          
+
         return(
             <div>
                 <br/>
-                {this.state.ordersuccess && <Redirect to="/ownerhome" />}
+                {this.state.ordersuccess && <Redirect to="/buyerhome" />}
                 {this.state.logout && <Redirect to='/signinbuyer'/>}
                
                    <div className="container">
@@ -347,69 +298,9 @@ deletequantitycheck=(val1)=>
     
                         </nav>
 
-                      
+                       { Restitems}
 {/* //make objects from query */}
-<h2>Breakfast</h2>
-<Table.Body>  
-         {/* add image too */}
-          {/* <Table.Body>   */}
-            {this.state.breakfast.map( (breakfast) =>
 
-
-            
-              (<Table.Row  key={breakfast.ItemId}>
- 
-               <Table.Cell>{breakfast.name} </Table.Cell>
-               <Table.Cell>{breakfast.price}</Table.Cell>
-               <Table.Cell>    <button  onClick={()=>this.deletequantitycheck(breakfast.ItemId)}>Delete</button> </Table.Cell>
-                <Table.Cell>   <button onClick={()=>this.addquantitycheck(breakfast.ItemId)}>Add</button>  </Table.Cell>
-               <Table.Cell>    {this.state.quan[breakfast.ItemId]}</Table.Cell>
-               <Table.Cell>    </Table.Cell> 
-               <Table.Cell>    <button  onClick={()=>this.cartcheck(breakfast.ItemId,breakfast.name,breakfast.price,this.state.quan[breakfast.ItemId])}>Add To cart</button> </Table.Cell>
-
-             </Table.Row>),
-     )} 
-
-     </Table.Body>
-       
-
-
-    <h2>Lunch</h2>      
-    <Table.Body>  
-         {/* add image too */}
-          {/* <Table.Body>   */}
-            {this.state.lunch.map( (breakfast) =>
-              (<Table.Row  key={breakfast.ItemId}>
- 
-               <Table.Cell>{breakfast.name} </Table.Cell>
-               <Table.Cell>{breakfast.price}</Table.Cell>
-               <Table.Cell>    <button  onClick={()=>this.deletequantitycheck(breakfast.ItemId)}>Delete</button> </Table.Cell>
-                <Table.Cell>   <button onClick={()=>this.addquantitycheck(breakfast.ItemId)}>Add</button>  </Table.Cell>
-               <Table.Cell>    {this.state.quan[breakfast.ItemId]}</Table.Cell>
-               
-             </Table.Row>),
-     )} 
-
-     </Table.Body>
-
-
-    <h2>Dinner</h2>
-
- <Table.Body>  
-         {/* add image too */}
-          {/* <Table.Body>   */}
-            {this.state.dinner.map( (breakfast) =>
-              (<Table.Row  key={breakfast.ItemId}>
- 
-               <Table.Cell>{breakfast.name} </Table.Cell>
-               <Table.Cell>{breakfast.price}</Table.Cell>
-               <Table.Cell>    <button  onClick={()=>this.deletequantitycheck(breakfast.ItemId)}>Delete</button> </Table.Cell>
-                <Table.Cell>   <button onClick={()=>this.addquantitycheck(breakfast.ItemId)}>Add</button>  </Table.Cell>
-               <Table.Cell>    {this.state.quan[breakfast.ItemId]}</Table.Cell>
-               
-             </Table.Row>),
-     )} 
-     </Table.Body>
                        
    <div>
                <h2>Cart</h2>
@@ -431,25 +322,17 @@ deletequantitycheck=(val1)=>
      )
 
       
-
-
 }
 
-<p>{this.state.globaltotal}</p>
+<p> Total :  {this.state.globaltotal}</p>
 
-{this.state.cartcheck && <button onClick={()=>this.checkouthandler }>Check Out</button>}
-
-)
-
-
-             </div>          
-                        <div style={{width: '30%'}}>
+{this.state.cartcheck && <button onClick={this.checkouthandler }>Check Out</button>}
+ </div>          
+       <div style={{width: '30%'}}>
                             <button  className="btn btn-success"  >Log out</button>
-                        </div>
-
-                        <br/> 
-                            
-                        <br/> 
+        </div>
+  <br/> 
+           <br/> 
                   </div>
             </div>
         )
@@ -458,11 +341,4 @@ deletequantitycheck=(val1)=>
 } 
     export default Restaurent;
 
-    
-
-    //multer
-    //session managementy
-    //report
-    //aws deployemmt
-    //jmeter
     

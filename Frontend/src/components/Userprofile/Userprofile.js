@@ -10,7 +10,7 @@ class Userprofile extends Component{
         //Call the constrictor of Super class i.e The Component
         super(props);
         //maintain the state required for this component
-        this.state = {
+ this.state = {
                 email: "",
                 password:"",
                 phonenumber:"",
@@ -19,7 +19,7 @@ class Userprofile extends Component{
                 messegevalue:"",
                 update:"",
                 result:"",
-                type:"buyer"//this.prop.type  from the actual front page
+                type:"buyer"
   }
     
 
@@ -58,7 +58,7 @@ componentDidMount=()=>{
     //console.log(this.props.emailfromstore)
     axios.defaults.withCredentials = true;
     
-    axios.post('http://localhost:3001/getdata', data)
+    axios.post('http://ec2-3-130-96-6.us-east-2.compute.amazonaws.com/getdata', data)
     .then(response=>{
        console.log("response.data.name ",response.data.Name);
        console.log("response  ",response);
@@ -104,7 +104,7 @@ updateBuyerCheck=(e)=>{
 
         axios.defaults.withCredentials = true;
 
-        axios.post('http://localhost:3001/updatebuyer', data)
+        axios.post('http://ec2-3-130-96-6.us-east-2.compute.amazonaws.com/updatebuyer', data)
             .then(response => {
                 console.log('response::', response);
                 console.log("Status Code : ",response.status);
@@ -149,16 +149,6 @@ updateBuyerCheck=(e)=>{
 }
 
 
-
-//functions for connecting backend
-//password
-//a new second field of password can be made, in which chek can be applied of password matchjng, then the condition of alpha numeric and more
-
-//render the functionality
-
-
-
-
 render(){
     
     return(
@@ -198,11 +188,7 @@ render(){
                         <input  onChange = {this.nameChangeHandler}  type="text" className="form-control" name="name" placeholder="Name" value={this.state.name}></input>
                     </div>
                     <br/>    
-                    
-                    {/* <div style={{width: '30%'}} className="form-group">
-                        <input required onChange = {this.emailChangeHandler}  type="text" className="form-control" name="email" placeholder="Email" value={this.state.email}></input>
-                    </div>
-                    <br/> */}
+                
 
                     <div style={{width: '30%'}} className="form-group">
                         <input  onChange = {this.passwordChangeHandler}  type="text" className="form-control" name="password" placeholder="Password" value={this.state.password} ></input>
