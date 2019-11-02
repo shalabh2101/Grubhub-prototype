@@ -25,7 +25,6 @@ class Ownerprofile extends Component{
                 type:"owner"//this.prop.type  from the actual front page
   }
     
-
  this.passwordChangeHandler=this.passwordChangeHandler.bind(this);
  this.phonenumberChangeHandler=this.phonenumberChangeHandler.bind(this);
  this.nameChangeHandler=this.nameChangeHandler.bind(this);
@@ -55,7 +54,7 @@ class Ownerprofile extends Component{
            })
            }
 
-phonenumberChangeHandler=(e)=>{
+         phonenumberChangeHandler=(e)=>{
             this.setState ({   
                    phonenumber: e.target.value
            })
@@ -90,7 +89,7 @@ var Email=this.props.match.params.email1
 
     axios.defaults.withCredentials = true;
     
-    axios.post('http://localhost:3001/getdata', data)
+    axios.post('http://ec2-3-130-96-6.us-east-2.compute.amazonaws.com/getdata', data)
     .then(response=>{
        console.log("response.data.name ",response.data.Name);
        console.log("response  ",response);
@@ -138,7 +137,7 @@ updateOwnerCheck=(e)=>{
 
         axios.defaults.withCredentials = true;
 
-        axios.post('http://localhost:3001/updatebuyer', data)
+        axios.post('http://ec2-3-130-96-6.us-east-2.compute.amazonaws.com/updatebuyer', data)
             .then(response => {
                 console.log('response::', response);
                 console.log("Status Code : ",response.status);
@@ -150,10 +149,7 @@ updateOwnerCheck=(e)=>{
                             errormessege:false,
                             result:response.data,
                             update:true
-                        
-
-
-                })  
+               })  
                 const data=this.state.email;
               
                 console.log("Correct  updation",response.body)

@@ -24,8 +24,6 @@ class Search extends Component{
                
              }
         
-       // this.searchChangeHandler=this.searchChangeHandler.bind(this);
-     //   this.searchHomeCheck=this.searchHomeCheck.bind(this);
            }
     
            searchChangeHandler=(e)=>{

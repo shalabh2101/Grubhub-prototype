@@ -42,7 +42,7 @@ componentDidMount=()=>{
     console.log("Inside the component did mount")
     const data={
         email:this.props.emailfromstore,
-        type:this.state.type
+        type:'buyer'
     }
     console.log("this is email",data.email)
     console.log(this.props.emailfromstore)
@@ -123,11 +123,7 @@ componentDidMount=()=>{
 
 }
 
-//functions for connecting backend
-//password
-//a new second field of password can be made, in which chek can be applied of password matchjng, then the condition of alpha numeric and more
 
-//render the functionality
 render(){
     var url= "/search/" + this.state.search;
     return(
@@ -144,8 +140,8 @@ render(){
                     <nav class="navbar navbar-expand-lg navbar-dark primary-color">
 
                          <a class="navbar-brand" href="#" style ={{color:'red'}}>GRUBHUB</a>
-                         <NavLink to="/userprofile"  exact  class="navbar-brand" activeStyle={ {color:'red'}}>{this.state.name}</NavLink>
-                         <a class="navbar-brand"   style={{color:'blue'}} >{this.state.name}</a>
+                         <NavLink to="/userprofile"  exact  class="navbar-brand" activeStyle={ {color:'red'}}> Profile:{this.state.name}</NavLink>
+                       
 
                     </nav>
 
@@ -166,6 +162,24 @@ render(){
                     <div style={{width: '30%'}}>
                         <button  className="btn btn-success"  >Log out</button>
                     </div>
+
+
+                    <nav class="navbar navbar-expand-lg navbar-dark primary-color">
+
+
+                    <nav class="navbar navbar-expand-lg navbar-dark primary-color">
+
+
+<NavLink to="/pastorder"  exact  class="navbar-brand" activeStyle={ {color:'red'}}> Past Orders</NavLink>
+<NavLink to="/upcomingorder"  exact  class="navbar-brand" activeStyle={ {color:'red'}}> Upcoming Orders</NavLink>
+
+
+</nav>
+
+
+
+
+</nav>
 
                     <label> </label>
 
