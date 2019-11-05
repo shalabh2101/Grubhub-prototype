@@ -14,6 +14,7 @@ class Signupbuyer extends Component{
             name : "",
             email: "",
             password:"",
+            check:false
         }
 
  this.nameChangeHandler=this.nameChangeHandler.bind(this)
@@ -63,7 +64,8 @@ signUpBuyerCheck=(e)=>{
                // console.log('existssss:', this.exists)
                 if(response.status === 200 ){
                     this.setState({
-                        result : response.data
+                        result : response.data,
+                        check:true
                 })  
                 console.log("chekcing the data",response.body)
                 }
@@ -110,6 +112,7 @@ render(){
                     </div>
                     <br/> 
                     
+                 {  this.state.check && <p> Successfully signed up. Click Sign in to Continue </p>}
 
                     <div style={{width: '30%'}}>
                         {/* <a href={<Redirect to ="/signupbuyer"/>}>Not a member?Click here for  Sign Up</a> */}

@@ -33,15 +33,23 @@ class Restaurent extends Component {
                globaltotal:0,
                cartvalue:"",
                Items:{},
-               quantity:{}
+               quantity:{},
+               messegebutton:true,
+               messegebody:false,
+               messegetextt:""
 
                
              }
 
+
         this.addquantitycheck=this.addquantitycheck.bind(this);
         this.deletequantitycheck=this.deletequantitycheck.bind(this);
         this.checkouthandler=this.checkouthandler.bind(this);
-   }
+        this.messegetexthandler=this.messegetexthandler.bind(this);
+        this.messegehandler=this.messegehandler.bind(this);
+      this.messegebuttoncheck=this.messegebuttoncheck.bind(this);
+        
+ }
     
           
     
@@ -54,6 +62,7 @@ var i;
         console.log(this.state.quan);
 
         const Restaurentid = this.props.match.params.id;
+        localStorage.setItem('rest_id',Restaurentid)
         console.log(Restaurentid);
 
         console.log("Inside the  Restaurent component did mount")
@@ -284,6 +293,79 @@ deletequantitycheck=(val1)=>
 }
 
 
+messegetexthandler=(e)=>{
+
+  this.setState(
+    {
+      messegetext : e.target.value
+    }
+  )
+}
+
+messegehandler=()=>
+{
+
+  const data={
+  
+    to: localStorage.getItem('rest_id'),
+    from: localStorage.getItem('buyer_id'),
+    restname:"",
+    restimage:"",
+    buyername: localStorage.getItem('name_buyer'),
+    buyerimage:"",
+    messege:this.state.messegetext
+
+  }
+
+  axios.post('http://localhost:3001/postmessege/', data)
+  .then(response=>{
+    
+     console.log("response  ",response);
+     console.log(response.data)
+      if(response.status === 200 ){ 
+
+          console.log("Messege is updated ");
+         
+          this.setState({
+             messegebody:false,
+            messegebutton:true,
+            messegetext:""
+      })   }
+      else
+         {console.log("something not right")}
+
+})
+  .catch(err=>{
+      console.log('postorder  catch error: 1')
+  console.log('err:', err)
+  this.setState({
+    messegebody:false,
+    messegebutton:true,
+    messegetext:""
+  })
+  });
+
+}
+
+
+messegebuttoncheck=(e)=>{
+   
+
+  console.log("messegebutton",this.state.messegebutton);
+  console.log("messegebody",this.state.messegebody);
+  
+  this.setState(
+    {
+      messegebutton:false,
+      messegebody:true
+    }
+  );
+
+  console.log("messegebutton",this.state.messegebutton);
+  console.log("messegebody",this.state.messegebody);
+
+}
+
 
 
 
@@ -330,8 +412,20 @@ deletequantitycheck=(val1)=>
                              <a class="navbar-brand" href="#" style ={{color:'red'}}>GRUBHUB</a>
                              <NavLink to="/userprofile"  exact  class="navbar-brand" activeStyle={ {color:'red'}}>{this.state.name}</NavLink>
                              <a class="navbar-brand"   style={{color:'blue'}} >{this.state.name}</a>
-    
-                        </nav>
+                </nav>
+
+              {  this.state.messegebutton &&  <div style={{width: '30%'}}>
+                            <button  className="btn btn-success" onClick={this.messegebuttoncheck } >Messege to Restaurent owner</button>
+                        </div>  }
+
+               
+              {  this.state.messegebody &&  <div style={{width: '30%'}}>
+                      <div style={{width: '30%'}} className="form-group">
+                        <input required onChange = {this.messegetexthandler}  type="text" className="form-control" name="email" placeholder="Enter the messege" ></input>
+                      </div>
+                            <button  className="btn btn-success" onClick={this.messegehandler } >Send Messege</button>
+                        </div>  }
+
 
                        { Restitems}
 {/* //make objects from query */}
@@ -363,6 +457,9 @@ deletequantitycheck=(val1)=>
 
 {this.state.cartcheck && <button onClick={this.checkouthandler }>Check Out</button>}
  </div>          
+
+
+ 
        <div style={{width: '30%'}}>
                             <button  className="btn btn-success"  >Log out</button>
         </div>

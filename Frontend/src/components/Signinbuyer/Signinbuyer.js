@@ -30,9 +30,9 @@ class Signinbuyer extends Component{
 
              }
     
- this.emailChangeHandler=this.emailChangeHandler.bind(this)
- this.passwordChangeHandler=this.passwordChangeHandler.bind(this)
-
+ this.emailChangeHandler=this.emailChangeHandler.bind(this);
+ this.passwordChangeHandler=this.passwordChangeHandler.bind(this);
+ this.signInBuyerCheck=this.signInBuyerCheck.bind(this);
         }
 
 
@@ -51,6 +51,7 @@ passwordChangeHandler=(e)=>{
 signInBuyerCheck=(e)=>{
 
     e.preventDefault();//
+  var  emailcheck=this.state.email;
     const data = {
         email : this.state.email,
         password: this.state.password,
@@ -65,17 +66,20 @@ signInBuyerCheck=(e)=>{
                 console.log('response::', response);
                 console.log("Status Code : ",response.status);
                // console.log('existssss:', this.exists)
-                if(response.status === 202 ){
+                if(response.status === 200 ){
                     this.setState({
                         
-                           
                             errormessege:false,
                             result:response.data,
                             shift:true
                         
-
-
                 })  
+
+                window.localStorage.setItem('name_buyer',response.data.name);
+                
+                window.localStorage.setItem('buyer_id',response.data.id);
+                window.localStorage.setItem('buyer_email',emailcheck);
+               
                 const data=this.state.email;
               
                 console.log("Correct Credentials",response.body)
@@ -107,12 +111,6 @@ signInBuyerCheck=(e)=>{
 }
 
 
-
-//functions for connecting backend
-//password
-//a new second field of password can be made, in which chek can be applied of password matchjng, then the condition of alpha numeric and more
-
-//render the functionality
 
 
 
@@ -162,7 +160,7 @@ render(){
                     <br/>
 
                     <div style={{width: '30%'}}>
-                        <button  className="btn btn-success" onClick= {this.signInBuyerCheck} type="submit">Sign In</button>
+                        <button  className="btn btn-success" onClick= {()=>this.signInBuyerCheck} type="submit">Sign In</button>
                     </div>
                     <br/> 
                     

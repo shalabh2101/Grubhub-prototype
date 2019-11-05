@@ -21,9 +21,6 @@ var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/";
 
 
-
-
-
 MongoClient.connect(url, function (err, db) {
     if (err) throw err;
     console.log("Mongo connected")
@@ -68,11 +65,7 @@ app.use(function (req, res, next) {
     next();
 });
 
-
-
 //Routes
-
-
 
 app.use("/signupbuyer",signup);
 app.use("/updatebuyer",updatebuyer);
@@ -80,7 +73,6 @@ app.use("/updateorders",orders);
 app.use("/searchfood",search);
 app.use("/getdata",data);
 app.use("/signinbuyer",login);
-
 
 
 //use the email in req    ,
@@ -149,8 +141,6 @@ app.use("/signinbuyer",login);
 // });
 
 
-
-use in req
 app.post('/postorder', function (req, res) {
 
     console.log("user details are ", user.email);
@@ -167,6 +157,26 @@ app.post('/postorder', function (req, res) {
         await dbo.collection("Orders").insertOne(obj, function (err, result) {
             if (err) checkstatus = "Failed Order Insert"
             else checkstatus = "Success Order inserted"
+            db.close();
+            res.end(checkstatus)
+        });
+
+    });
+
+});
+
+
+app.post('/postmessege', function (req, res) {
+
+  var checkstatus="";
+    MongoClient.connect(url, async function (err, db) {
+        if (err) throw err;
+        var dbo = db.db("grubhub");
+        // var obj = { Name: user.name,id:user.id, Rid:user.rid,Description:req.body.order, RestaurentName: user.restname,RestaurentImage:user.restimage,status:'n'};
+        var obj = { to: req.body.to,from:req.body.from, restname:req.body.restname,restimage:req.body.restimage, buyername: req.body.buyername,buyerimage:req.body.restimage,messege:req.body.messege};
+        await dbo.collection("Messege").insertOne(obj, function (err, result) {
+            if (err) checkstatus = "Failed Messege Insert"
+            else checkstatus = "Success Messege inserted"
             db.close();
             res.end(checkstatus)
         });
@@ -394,6 +404,50 @@ app.post('/getResOrders', function (req, res) {
 
     
 });
+
+
+
+//use rid in req from only buyer
+//getting orders from the current restaurent
+app.post('/getMesseges', function (req, res) {
+    console.log("Inside the MESSEGES")
+
+    MongoClient.connect(url,async function (err, db) {
+    if (err) {
+        console.log("Error", err)
+        res.end("Not able to connect to db--order buyer")
+    }
+        var dbo = db.db("grubhub");
+      console.log(req.body.id);
+      query = {to:  req.body.id   };
+         // query = {Rid:  mongoose.Types.ObjectId(user.id)   };
+         
+      //  var query = { Name: req.body.food };
+      await  dbo.collection("Messege").find(query).toArray(function (err, result) {
+        if (err) {
+            console.log("Error", err)
+            res.end("Not able to connect to db--order buyer")
+        }
+        else {
+            console.log("Order Success")
+            if (result.length >= 1) {
+                console.log("GET RESTAURENT ORDERS")
+                console.log(result);
+                res.send(result);
+            }
+            else {
+                console.log("-------GET RESTAURENT ORDERS")
+                res.send("No data found");
+            }
+        }
+          //  res.send(checkstatus);
+            db.close();
+        });
+    });
+
+    
+});
+
 
 //use req the res items
 app.post('/postitem', function (req, res) {  

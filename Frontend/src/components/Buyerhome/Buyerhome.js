@@ -21,21 +21,24 @@ class Buyerhome extends Component{
             searchsuccess:0,
             logout:false,
             email:this.props.emailfromstore,
-            type:this.props.type
-             }
+            type:this.props.type,
+            messeges:[]
+            
+        }
     
-    this.searchChangeHandler=this.searchChangeHandler.bind(this);
-    this.searchHomeCheck=this.searchHomeCheck.bind(this);
+         this.searchChangeHandler=this.searchChangeHandler.bind(this);
+         this.searchHomeCheck=this.searchHomeCheck.bind(this);
        }
 
 
 
     searchChangeHandler=(e)=>{
- this.setState ({   
+     this.setState ({   
         search: e.target.value
         
 })
 }
+
 
 componentWillMount=()=>{
 
@@ -53,7 +56,7 @@ componentWillMount=()=>{
        console.log("response.data.name ",response.data.Name);
        console.log("response  ",response);
        console.log("response.body", response.body)
-        if(response.status === 200 ){ //why 202 and why 200 please check
+        if(response.status === 200 ){ 
             this.setState({
                    name:response.data.Name
         })  
@@ -75,6 +78,41 @@ componentWillMount=()=>{
     this.setState({
         searchcheck:2,
         errormessege:true
+    })
+    })
+
+
+   const data1={
+       id: localStorage.getItem('buyer_id')
+   }
+
+    axios.post('http://localhost:3001/getMesseges', data1)
+    .then(response=>{
+       console.log("response.data.name ",response.data.Name);
+       console.log("response  ",response);
+       console.log("response.body", response.body)
+        if(response.status === 200 ){ 
+            this.setState({
+                   messeges:response.data
+        })  
+
+      //  window.localStorage.setItem('name_buyer',response.data.Name);
+
+        }
+        else {
+            this.setState({
+               // errormessege:true,
+     })  
+       
+        }
+ })
+    .catch(err=>{
+
+        console.log('Search  exist in getting name:')
+    console.log('err:', err)
+    this.setState({
+        searchcheck:2,
+        
     })
     })
 
@@ -129,6 +167,38 @@ componentWillMount=()=>{
 
 render(){
     var url= "/search/" + this.state.search;
+
+     let messegelist;
+    // console.log("this.state.messeges.length()");
+    // console.log(this.state.messeges.length());
+     console.log("this.state.messeges.length()");
+     console.log(this.state.messeges);
+     console.log("this.state.messeges.length()");
+     console.log(this.state.messeges.length);
+    
+       if(this.state.messeges.length !==0)
+       {
+          messegelist=<table cellspacing="40">  
+           
+          {this.state.messeges.map( (fooditem) =>
+              
+              <tr key={fooditem._id}>
+              
+
+                    <td > --FROM---  </td>
+                    <td >{fooditem.restname}</td>  
+                 
+                    <td > --messege---  </td>
+                    <td > {fooditem.messege}  </td>
+
+               
+              </tr>
+            
+          )} 
+        </table>
+
+       }
+
     return(
         <div>
             <br/>
@@ -162,6 +232,9 @@ render(){
 
                     <br/>
                     
+
+
+
                     <div style={{width: '30%'}}>
                         <button  className="btn btn-success"  >Log out</button>
                     </div>
@@ -175,6 +248,9 @@ render(){
 
 <NavLink to="/pastorder"  exact  class="navbar-brand" activeStyle={ {color:'red'}}> Past Orders</NavLink>
 <NavLink to="/upcomingorder"  exact  class="navbar-brand" activeStyle={ {color:'red'}}> Upcoming Orders</NavLink>
+
+   {messegelist}
+
 
 
 </nav>

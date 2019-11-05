@@ -57,22 +57,18 @@ signInBuyerCheck=(e)=>{
         axios.post('http://localhost:3001/signinbuyer', data)
             .then(response => {
                 console.log('response::', response);
-                console.log("Status Code : ",response.status);
+                console.log("Status Code  : ",response.status);
                // console.log('existssss:', this.exists)
-                if(response.status === 202 ){
+                if(response.status === 200 ){
                     this.setState({
-                        
-                           
-                            errormessege:false,
+                      
+                        errormessege:false,
                             result:response.data,
                             shift:true
                         
-
-
-                })  
-                const data=this.state.email;
-              
-                console.log("Correct Credentials",response.body)
+                 })  
+          
+                 console.log("Correct Credentials",response.body)
                 }
                 // if(response.status === 401 )
                 else {
