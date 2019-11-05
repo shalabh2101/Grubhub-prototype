@@ -32,19 +32,16 @@ class Restaurent extends Component {
             dialogstatus:false,
             dialogitemname:"",
             dialogitemprice:"",
-            currentsection:""
+            currentsection:"",
+            Itemcheck:false,
+            sections:[]
 
         }
 
-
-
-
-
-      
         this.handleClose=this.handleClose.bind(this);
         this.handleSubmit=this.handleSubmit.bind(this);
         this.handledialogitem=this.handledialogitem.bind(this);
-
+    //    this.sectiondisplay=this.sectiondisplay.bind(this);
     }
 
 
@@ -57,7 +54,8 @@ class Restaurent extends Component {
 
         console.log("Inside the  Restaurent Menu did mount")
         const data = {
-            id: Restaurentid,
+           // id: Restaurentid,
+           id: localStorage.getItem('rest_id'),
             type:'owner'
      }
 
@@ -73,11 +71,14 @@ class Restaurent extends Component {
                 if (response.status === 200) {
 
                     console.log("Updating fooditems state");
-                    if (isNull(response.data)) { console.log("breakfast is null") }
-                    this.setState({
+                    if (isNull(response.data) || response.data ==="Not able to connect to db--update buyer") { console.log("breakfast is null") }
+                    else{this.setState({
                         Items: response.data,
-                    })
+                        Itemcheck:true,
+                        sections:Object.keys(response.data)
+                    })}
                     console.log(response.data)
+                   console.log(Object.keys(response.data));
 
                 }
                 else { console.log("something not right") }
@@ -86,7 +87,8 @@ class Restaurent extends Component {
                 console.log('Restaurent  catch error: 1')
                 console.log('err:', err)
                 this.setState({
-                    errormessege: true
+                    errormessege: true,
+                    Itemcheck:false
                 })
             });
 
@@ -94,10 +96,7 @@ class Restaurent extends Component {
 
     }
 
-
-    
-
-    handleClose=()=>
+  handleClose=()=>
     {
         
         this.setState(
@@ -113,12 +112,15 @@ class Restaurent extends Component {
 
     handleSubmit=()=>
     {
-          
-
+     
            const data={
                itemName:this.state.dialogitemname,
                itemPrice:this.state.dialogitemprice,
-               section:this.state.currentsection
+               section:this.state.currentsection,
+               id:localStorage.getItem('rest_id'),
+               restname:localStorage.getItem('restname'),
+               restimage:localStorage.getItem('restimage'),
+               cuisine:localStorage.getItem('cuisine')
            }
 
 
@@ -152,6 +154,51 @@ class Restaurent extends Component {
             }
         )
         console.log("came till handle submit");
+
+
+        const Restaurentid = this.props.match.params.id;
+        console.log(Restaurentid);
+
+        console.log("Inside the  Restaurent Menu did mount")
+        const data1= {
+            id: Restaurentid,
+            type:'owner'
+     }
+
+        console.log("this is id", data.id)
+
+        axios.defaults.withCredentials = true;
+
+        axios.post('http://localhost:3001/getrestaurentmenu/', data1)
+            .then(response => {
+
+                console.log("response  ", response);
+                console.log(response.data)
+                if (response.status === 200) {
+
+                    console.log("Updating fooditems state");
+                    if (isNull(response.data) || response.data ==="Not able to connect to db--update buyer") { console.log("breakfast is null") }
+                    else{this.setState({
+                        Items: response.data,
+                        Itemcheck:true,
+                        sections:Object.keys(response.data)
+                    })}
+                    console.log(response.data)
+                   console.log(Object.keys(response.data));
+
+                }
+                else { console.log("something not right") }
+            })
+            .catch(err => {
+                console.log('Restaurent  catch error: 1')
+                console.log('err:', err)
+                this.setState({
+                    errormessege: true,
+                    Itemcheck:false
+                })
+            });
+
+
     }
 
 
@@ -162,18 +209,40 @@ class Restaurent extends Component {
     
     }
 
-
     
 
     render() {
 
+
+     
+      let  sectiondisplay;
+     console.log("current cliked sections");
+      console.log(this.state.currentsection)
+          if(! this.state.sections.includes(this.state.currentsection))
+        {  sectiondisplay=    <TextField
+               autoFocus
+               margin="dense"
+               id="Section Name"
+               label="Add a Section"
+               onChange={(e) => this.setState({
+                  currentsection:e.target.value
+              })}
+               fullWidth 
+             />}
+    
+             else 
+            { sectiondisplay=   (this.state.currentsection);
+    
+    
+          };
 
 
 let  newitemDialog=<Dialog open={this.state.dialogstatus} onClose={this.handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Add a Item</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            {this.state.currentsection}
+        {sectiondisplay}
+            {/* {this.state.currentsection} */}
           </DialogContentText>
           
           <TextField
@@ -212,26 +281,33 @@ let  newitemDialog=<Dialog open={this.state.dialogstatus} onClose={this.handleCl
         
 
 
-        let Restitems = Object.keys(this.state.Items).map((key) => {
+       
 
+       
+        if(this.state.Itemcheck)
+       { var Restitems= Object.keys(this.state.Items).map((key) => {
+console.log("this.state.Items length");
+console.log(this.state.Itemcheck);
+console.log("this.state.Items");
             return (
                 <Table.Body>
                     <h2>{key}</h2>
-                    {newitemDialog }
-                    <button onClick={()=>this.setState({dialogstatus:true,currentsection:key})}> New Item </button>
+                    {/* {newitemDialog } */}
+                    <button onClick={()=>this.setState({dialogstatus:true,currentsection:key})}>  Add New Item </button>
                     {
                         this.state.Items[key].map((breakfast) => (
-                        <Table.Row key={breakfast.ItemId}>
-                                <Table.Cell>{breakfast.name} </Table.Cell>
-                                <Table.Cell>{breakfast.price}</Table.Cell>
+                        <Table.Row key={breakfast._Id}>
+                                <Table.Cell>{breakfast.Name} </Table.Cell>
+                                <Table.Cell>{breakfast.Price}</Table.Cell>
                         </Table.Row>),
                         )}
 
                 </Table.Body>)
 
         })
-
-
+    }
+    
+    
         return (
             <div>
                 <br />
@@ -248,7 +324,8 @@ let  newitemDialog=<Dialog open={this.state.dialogstatus} onClose={this.handleCl
                         <a class="navbar-brand" style={{ color: 'blue' }} >{this.state.name}</a>
 
                     </nav>
-
+                    {newitemDialog }
+                    <button onClick={()=>this.setState({dialogstatus:true,currentsection:""})}> New Item </button>
                     {Restitems}
 
                 </div>

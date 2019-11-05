@@ -29,11 +29,12 @@ this.getitems=this.getitems.bind(this);
     
     console.log("Inside the  Restaurent component did mount")
     const data = {
-      
+      id:localStorage.getItem('buyer_id'),
       type: 'd'
     }
 
-   // console.log("this is id", data1.id)
+
+    console.log("this is id", data.id)
 
     axios.defaults.withCredentials = true;
 

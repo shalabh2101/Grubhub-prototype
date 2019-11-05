@@ -5,19 +5,41 @@ var app = express();
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
+const search=require("./routes/search");
 var cors = require('cors');
-app.set('view engine', 'ejs');
+const signup=require("./routes/signup");
+const updatebuyer=require("./routes/updatebuyer");
+const orders=require("./routes/orders");
+const data=require("./routes/data");
+const login=require("./routes/login");
+
+var mongoose = require('mongoose');
 
 var mongo = require('mongodb');
 
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/";
 
-MongoClient.connect(url, function(err, db) {
-  if (err) throw err;
-  console.log("Mongo connected")
-  
+
+
+
+
+MongoClient.connect(url, function (err, db) {
+    if (err) throw err;
+    console.log("Mongo connected")
+
 });
+
+var user = {
+    name: "",
+    email: "",
+    id: "",
+    rid: "",
+    restimage:"",
+    cuisine:"",
+    restname:"",
+
+}
 
 //use cors to allow cross origin resource sharing
 app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
@@ -33,9 +55,7 @@ app.use(session({
     //store: new redisStore({ host: 'localhost', port: 6379, client: client,ttl : 260}),
 }));
 
-// app.use(bodyParser.urlencoded({
-//     extended: true
-//   }));
+
 app.use(bodyParser.json());
 
 //Allow Access Control
@@ -48,458 +68,263 @@ app.use(function (req, res, next) {
     next();
 });
 
-var mysql = require('mysql');
 
-var con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "password",
-    database: "grubhubmain"
-});
+
+//Routes
 
 
 
-//*****handle errors */
+app.use("/signupbuyer",signup);
+app.use("/updatebuyer",updatebuyer);
+app.use("/updateorders",orders);
+app.use("/searchfood",search);
+app.use("/getdata",data);
+app.use("/signinbuyer",login);
 
-con.connect(function (err) {
-    if (err) throw err;
-    console.log("Connected!");
-});
 
-//Route to store the sign up information of buyer
-app.post('/signupbuyer', function (req, res) {
 
-    //*****handle errors */ HANDLING ERROR OF SQL
-    console.log("Inside the buyer/owner sign up page")
+//use the email in req    ,
+// app.post('/getdata', function (req, res) {
+//     console.log("Inside the getting name method")
+//     console.log("  session email " + user.email)
 
-    console.log("resname", req.body.resname);
-    console.log("resname", req.body.reszipcode);
+//     console.log("req body  ", req.body)
 
-    console.log(req.body)
-
-    if (req.body.type === 'buyer') {
-
-        MongoClient.connect(url, function(err, db) {
-            if (err) throw err;
-            var dbo = db.db("userprofile");
+  
+//  var checkstatus = "";
+//     if (req.body.type === 'buyer') {
+//         MongoClient.connect(url, async function (err, db) {
+//             if (err) throw err;
+//             var dbo = db.db("grubhub");
+//             console.log("user.email");
+//            // console.log(user.email);
             
-          //  db.userprofile.insert( { Name: req.body.name, Email: req.body.email, Password: req.body.password, Phonenumber:"",Imagelocation:"" } )
-          dbo.collection("userprofile").insertOne( { Name: req.body.name, Email: req.body.email, Password: req.body.password, Phonenumber:"",Imagelocation:"" }, function(err, res) {
-              if (err) throw err;
-              console.log("userprofile one inserted created!");
-              db.close();
-            });
-          });
+//        //     var obj = { Email: user.email };
+//             var obj = { Email: req.body.email };
+//             await dbo.collection("userprofile").find(obj).toArray( function (err, result) {
+//                 if (err) checkstatus = "Failed Getdata in Buyer"
+//                 else {
+//                     console.log("result[0]");
+//                     console.log(result[0]);
+//                     res.send(result[0]);
+//                     checkstatus = result[0];
 
-
-        //   MongoClient.connect(url, function(err, db) {
-        //     if (err) throw err;
-        //     var dbo = db.db("db");
-        //     var myobj = { name: "Company Inc", address: "Highway 37" };
-        //     dbo.collection("customers").insertOne(myobj, function(err, res) {
-        //       if (err) throw err;
-        //       console.log("1 document inserted");
-        //       db.close();
-        //     });
-        //   });
+//                     //store the info of buyer here 
+//                     //id , Name, Email, Password, Phonenumber, Imagelocation
+//               }
+//                 db.close();
+//             });
+//         });
        
-// MongoClient.connect(url, function(err, db) {
-//   if (err) throw err;
-//   var dbo = db.db("db");
-//   dbo.collection("customers").findOne({}, function(err, result) {
-//     if (err) throw err;
-//     console.log(result.name);
-//     db.close();
-//   });
+//     }
+//     else {
+
+//         MongoClient.connect(url, async function (err, db) {
+//             if (err) throw err;
+//             var dbo = db.db("grubhub");
+//             var obj = { Email: req.body.email };
+//             await dbo.collection("Restaurent").find(obj).toArray (function (err, result) {
+//                 if (err) checkstatus = "Failed Getdata in Buyer"
+//                 else {
+//                     if (result.length != 0) {
+//                         checkstatus = result[0];
+//                         user.id = result[0]._id;
+//                         user.restimage=result[0].RestaurentImage;
+//                         user.restname=result[0].Name;
+//                         user.cuisine=result[0].Cuisine;
+//                     }
+//                     else
+//                         checkstatus = "No record found";
+                  
+
+//                 }
+//                 db.close();
+//                 res.send(checkstatus);
+
+//             });
+//         });
+     
+
+//     }
 // });
 
 
-       // sql = "INSERT INTO userprofile VALUES (0,?,?,?)";
 
-        // con.query(sql, [req.body.name, req.body.password, req.body.email], function (err, result) {
-        //     if (err) {
-        //         res.writeHead(404, {
-        //             'Content-Type': 'application/json'
-
-        //         });
-        //         res.end("Not able to connect to db")
-        //         console.log("Error", err)
-        //     }
-        //     else {
-        //         res.writeHead(200, {
-        //             'Content-Type': 'application/json'
-        //         })
-        //         res.end("Inserted");
-        //         console.log("1 record inserted");
-        //     }
-
-        // });
-    }
-
-    else {
-        sql = "INSERT INTO grubhubmain.Restaurent VALUES (0,?,null,?,null,null,null,?,?,null,?)";
-
-        var messege = "No record inserted";
-        con.query(sql, [req.body.resname, req.body.name, req.body.password, req.body.email, req.body.reszipcode], function (err, result) {
-            if (err) {
-                res.writeHead(404, {
-                    'Content-Type': 'application/json'
-
-                });
-                messege = "First record inserted"
-                //res.end("Not able to connect to db")
-                console.log("Error", err);
-                res.end("Failed Owner and Restaurent entered");
-            }
-            else {
-                res.writeHead(200, {
-                    'Content-Type': 'application/json'
-                })
-                // res.end("Inserted");
-                console.log("1 record inserted");
-                res.end("Success Owner and Restaurent entered");
-            }
-
-        });
-
-
-    }
-
-});
-
-
-app.post('/getdata', function (req, res) {
-    console.log("Inside the getting name method")
-    console.log("  session email " + user.email)
-
-    console.log("req body  ", req.body)
-
-
-    if (req.body.type === 'buyer') {
-        sql = "select * from  grubhubmain.userprofile where email=?";
-
-
-        con.query(sql, [user.email], function (err, result) {
-            if (err) {
-                res.writeHead(404, {
-                    'Content-Type': 'application/json'
-
-                });
-                res.end("Not able to connect to db")
-                console.log("Error", err)
-            }
-            else {
-
-
-                console.log("result get name", result[0])
-                const data = {
-
-                    name: result[0].Name
-                }
-                res.send(result[0]);
-
-            }
-        });
-
-    }
-    else {
-
-        sql = "select * from  grubhubmain.Restaurent where email=?";
-
-        con.query(sql, [req.body.email], function (err, result) {
-            if (err) {
-                res.writeHead(404, {
-                    'Content-Type': 'application/json'
-
-                });
-                res.end("Not able to connect to db")
-                console.log("Error", err)
-            }
-            else {
-                // res.writeHead(202,{
-                //     'Content-Type' : 'application/json'
-                // });
-
-                console.log("result get name", result[0])
-                if (result[0] === undefined) {
-                    res.end("No data found");
-                    console.log("no data")
-                }
-                else {
-                    const data = {
-
-                        name: result[0].OwnerName
-                    }
-                    user.id = result[0].Rid;
-                    res.send(result[0]);
-                }
-
-            }
-        });
-
-
-
-
-
-
-    }
-});
-
-var user = {
-    name: "",
-    email: "",
-    id: "",
-    rid: "",
-}
-
-
+use in req
 app.post('/postorder', function (req, res) {
-
 
     console.log("user details are ", user.email);
     console.log("user details are ", user.name);
     console.log("user details are ", user.id);
     console.log("user details are ", user.rid);
-    var sql = "insert into grubhubmain.Order values (0,?,?,?,?)"
 
-    con.query(sql, [user.rid, user.id, req.body.order, "new"], function (err, result) {
-        if (err) {
-            res.writeHead(404, {
-                'Content-Type': 'application/json'
-
-            });
-            res.end("Not able to connect to db")
-            console.log("Error", err)
-        }
-        else {
-            // res.writeHead(202,{
-            //     'Content-Type' : 'application/json'
-            // });
-
-            console.log("result get name", result[0])
-
-
-            res.send("Success ");
-
-        }
-    });
-
-
-
-
-
-});
-
-
-app.post('/signinbuyer', function (req, res) {
-
-    //*****handle errors */ HANDLING ERROR OF SQL
-    console.log("Inside the buyer sign IN page");
-    console.log(req.body);
-    if (req.body.type === 'buyer')
-        sql = "select id,password from  userprofile where email=?";
-    else
-        sql = "select Rid,password from  grubhubmain.Restaurent where email=?";
-
-    con.query(sql, [req.body.email], function (err, result) {
-        if (err) {
-            res.writeHead(404, {
-                'Content-Type': 'application/json'
-
-            });
-            res.end("Not able to connect to db")
-            console.log("Error", err)
-        }
-        else {
-            console.log(" result is " + result + 'end' + '  rres legth' + result.length);
-            if (result.length === 0) {
-                res.writeHead(204, {
-                    'Content-Type': 'application/json'
-                })
-                res.end("No data");
-            }
-            else {
-                // checking passwords from database
-                // console.log("result[0].Password ",result[0]);
-                if (req.body.password === result[0].password) {
-                    //##########return code for successful login
-                    res.writeHead(202, {
-                        'Content-Type': 'application/json'
-                    })
-                    res.end("Success");
-
-                    user.email = req.body.email;
-                    if (req.body.type === 'buyer')
-                        user.id = result[0].id;
-                    else
-                        user.id = result[0].Rid;
-                    // req.session.email=req.body.email;
-                }
-                else {
-                    // res.writeHead(401,{
-                    //     'Content-Type' : 'application/json'
-                    // })
-                    res.end("Incorrect Password");
-
-                }
-            }
-        }
+    var checkstatus="";
+    MongoClient.connect(url, async function (err, db) {
+        if (err) throw err;
+        var dbo = db.db("grubhub");
+        // var obj = { Name: user.name,id:user.id, Rid:user.rid,Description:req.body.order, RestaurentName: user.restname,RestaurentImage:user.restimage,status:'n'};
+        var obj = { Name: req.body.name,id:req.body.id, Rid:req.body.rid,Description:req.body.order, RestaurentName: req.body.restname,RestaurentImage:req.body.restimage,status:'n'};
+        await dbo.collection("Orders").insertOne(obj, function (err, result) {
+            if (err) checkstatus = "Failed Order Insert"
+            else checkstatus = "Success Order inserted"
+            db.close();
+            res.end(checkstatus)
+        });
 
     });
 
 });
 
+// //only set in response
+// app.post('/signinbuyer', function (req, res) {
+
+//     console.log("Inside the buyer/owner sign IN page");
+//     console.log(req.body);
+
+//     var collectionString = "";
+//     if (req.body.type === 'buyer')
+//         collectionString = "userprofile";
+//     else
+//         collectionString = "Restaurent";
+
+//         var data={};
+//        data.check=false;
+//         var checkstatus = "";
+//        MongoClient.connect(url,async function (err, db) {
+//         if (err) throw err;
+//         var dbo = db.db("grubhub");
+//         var query = { Email: req.body.email };
+//       await  dbo.collection(collectionString).find(query).toArray(function (err, result) {
+//             if (err) throw err;
+//             else {
+//                 if (result.length === 0)
+//                     checkstatus = "No data";
+//                 else {
+//                     console.log(result);
+//                     if (req.body.password === result[0].Password) {
+//                         checkstatus = "Success";
+          
+//                         user.email = req.body.email;
+//                         user.id = result[0]._id;
 
 
-//update the buyer information from profile page
-app.post('/updatebuyer', function (req, res) {
+//                      //   data.email=req.body.email;
+//                         data.id=result[0]._id,
+//                         data.check=true;
+//                         data.name=result[0].Name;
+//                         // STORE THE INFORMATION OF BOTH USER AND RESTAURENT OWNER HERE
+//                     }
+//                     else
+//                         checkstatus = "Incorrect Password";
+//                 }
 
-    //*****handle errors */ HANDLING ERROR OF SQL
-    console.log("Inside the update buyer backend page")
+//             }
+//             data.messege=checkstatus
+//            // res.send(checkstatus);
+//            res.send(data);
+//             db.close();
+//         });
+//     });
 
-    console.log(req.body)
-    sql = "update userprofile set name=?, phonenumber=?,password=? where email=?";
-    con.query(sql, [req.body.name, req.body.phonenumber, req.body.password, req.body.email], function (err, result) {
-        if (err) {
-            res.writeHead(404, {
-                'Content-Type': 'application/json'
+  
+// });
 
-            });
-            res.end("Not able to connect to db--update buyer")
-            console.log("Error", err)
-        }
-        else {
-            console.log(" result is " + result + 'end' + '  rres legth' + result.length);
-            res.writeHead(200, {
-                'Content-Type': 'application/json'
-
-            });
-            res.end("Success");
-        }
-
-
-
-    });
-
-});
-
-
-//Food Search
-app.post('/searchfood', function (req, res) {
-
-    //*****handle errors */ HANDLING ERROR OF SQL
-    console.log("Inside the searchfood  backend page")
-
-    console.log(req.body)
-    sql = "select Item.Rid as Id,Restaurent.name as resname,Item.Name as itemname,Cuisine from Item inner join Restaurent on Item.Rid=Restaurent.Rid where Item.Name=?"
-    con.query(sql, [req.body.food], function (err, result) {
-        if (err) {
-            res.writeHead(404, {
-                'Content-Type': 'application/json'
-
-            });
-            console.log("Error", err)
-            res.end("Not able to connect to db--update buyer")
-
-        }
-        else {
-            console.log("checking")
-            console.log(result);
-            res.send(result);
-        }
-
-    });
-
-});
-
-
-
-
+//from where it is calling
+//use owner id in req and set rid in response
 app.post('/getrestaurentmenu', function (req, res) {
 
     //*****handle errors */ HANDLING ERROR OF SQL
     console.log("Inside the searchfood  backend page")
-
-
     console.log(req.body)
-var index;
-    if(req.body.type==='buyer')
-       index=req.body.id;
+    
+    if (req.body.type === 'buyer')
+        index = mongoose.Types.ObjectId(req.body.id);
     else
-        index=user.id;   
-   // sql = "select ItemId, grubhubmain.Item.Rid as Rid,Item.Name as name,Price as price ,Quantity as quantity from grubhubmain.Item inner join grubhubmain.Restaurent on grubhubmain.Item.Rid=grubhubmain.Restaurent.Rid  where Sections=? and Item.Rid=?";
-   sql = "select ItemId, grubhubmain.Item.Rid as Rid,Item.Name as name,Price as price ,Sections,Quantity as quantity from grubhubmain.Item inner join grubhubmain.Restaurent on grubhubmain.Item.Rid=grubhubmain.Restaurent.Rid  where  Item.Rid=?"; 
-   //con.query(sql, [ req.body.id], function (err, result) {
-    con.query(sql, [ index], function (err, result) {
-        if (err) {
-            //   {res.writeHead(404,{
-            //     'Content-Type' : 'application/json'
+       index = mongoose.Types.ObjectId(req.body.id);
+    //    index = user.id;
 
-            // });
-            console.log("Error", err)
-            res.end("Not able to connect to db--update buyer")
-
-        }
-        else {
-            console.log("breakfast Success")
-            if (result.length >= 1) {
-                result1 = result;
-                result1check = true;
-                console.log(result);
-
-                var sections=[];
-                var finalresult={};
-
-                result.forEach(element => {
-                    console.log(element.Sections);
-
-                    if(finalresult.hasOwnProperty(element.Sections))
-                    {   
-                        let temp= finalresult[element.Sections];
-                        temp.push(element)
-                        finalresult[element.Sections]=temp;
-                     }
-                     else
-                     {     let temp=[];
-                        temp.push(element)
-                       finalresult[element.Sections]=temp;
-
-                    }    
-                });
-
-             console.log("finalresult");
-               console.log(finalresult);
-                res.send(finalresult);
-
-                user.rid = result[0].Rid;
-                console.log(user.rid);
-            }
+    var checkstatus = "";
+    MongoClient.connect(url,async function (err, db) {
+        if (err) throw err;
+        var dbo = db.db("grubhub");
+        var query = { Rid: index};
+    
+   
+      await  dbo.collection("Items").find(query).toArray(function (err, result) {
+            if (err) throw err;
             else {
-                res.send("No data found");
-            }
+                console.log("result");
+                console.log(result)
+                if (result.length >= 1) {
+                    result1 = result;
+                    result1check = true;
+                    console.log(result);
+    
+                    var sections = [];
+                    var finalresult = {};
+    
+                    result.forEach(element => {
+                        console.log(element.Sections);
+    
+                        if (finalresult.hasOwnProperty(element.Sections)) {
+                            let temp = finalresult[element.Sections];
+                            temp.push(element)
+                            finalresult[element.Sections] = temp;
+                        }
+                        else {
+                            let temp = [];
+                            temp.push(element)
+                            finalresult[element.Sections] = temp;
+    
+                        }
+                    });
+    
+                    console.log("finalresult");
+                    console.log(finalresult);
+                    res.send(finalresult);
+    
+                    user.rid = result[0].Rid;
+                 
+                }
+                else {
+                    console.log("No data in restaiurent");
+                    res.send("No data found");
+                }
 
-        }
+            }
+          
+            db.close();
+        });
     });
 
 });
 
-
+// use in req 
+//check from where it is calling
 app.post('/getpastorders', function (req, res) {
 
-console.log("Inside the getorders  backend page")
-if(req.body.type==='d')
-    sql = "select o.Orderid ,r.name as resname, Description from grubhubmain.Order as o join grubhubmain.Restaurent as r ON o.Rid = r.Rid where id=? and status like 'd' ;"
-else
-sql = "select o.Orderid ,r.name as resname, Description from grubhubmain.Order as o join grubhubmain.Restaurent as r ON o.Rid = r.Rid where id=? and status  not like 'd' ;"   
-   // console.log("userid ", user.id)
+    console.log("Inside the getorders  backend page")
 
-    con.query(sql, [user.id], function (err, result) {
+    var query;
+    MongoClient.connect(url,async function (err, db) {
+        if (err) throw err;
+        var dbo = db.db("grubhub");
+         if (req.body.type === 'd')
+         query = {id:mongoose.Types.ObjectId(req.body.id),status:'d'};
+       //   query = {id:user.id,status:'d'};
+          else
+          query = {id:mongoose.Types.ObjectId(req.body.id),status:{ $ne :'d'}};
+        //  query = {id:user.id,status:{ $ne :'d'}};
+
+      //  var query = { Name: req.body.food };
+      await  dbo.collection("Orders").find(query).toArray(function (err, result) {
         if (err) {
             console.log("Error", err)
             res.end("Not able to connect to db--order buyer")
         }
         else {
             console.log("Order Success")
+            console.log(result);
             if (result.length >= 1) {
 
                 var finalresult = [];
@@ -516,9 +341,7 @@ sql = "select o.Orderid ,r.name as resname, Description from grubhubmain.Order a
                     }
                     finalresult.push(data);
                 });
-
-
-
+                
                 console.log(finalresult);
                 res.send(finalresult);
             }
@@ -527,20 +350,28 @@ sql = "select o.Orderid ,r.name as resname, Description from grubhubmain.Order a
             }
 
         }
+          //  res.send(checkstatus);
+            db.close();
+        });
     });
-
 
 
 });
 
-
+//use rid in req from only buyer
 //getting orders from the current restaurent
 app.post('/getResOrders', function (req, res) {
     console.log("Inside the getResOrders  backend page")
 
-    sql = "select o.Orderid , Description,status from grubhubmain.Order as o join grubhubmain.Restaurent as r ON o.Rid = r.Rid where r.Rid=?  ;"
-    console.log("userid ", user.id)
-    con.query(sql, [user.id], function (err, result) {
+ MongoClient.connect(url,async function (err, db) {
+        if (err) throw err;
+        var dbo = db.db("grubhub");
+      console.log(user.id);
+      query = {Rid:  mongoose.Types.ObjectId(req.body.id)   };
+         // query = {Rid:  mongoose.Types.ObjectId(user.id)   };
+         
+      //  var query = { Name: req.body.food };
+      await  dbo.collection("Orders").find(query).toArray(function (err, result) {
         if (err) {
             console.log("Error", err)
             res.end("Not able to connect to db--order buyer")
@@ -556,57 +387,31 @@ app.post('/getResOrders', function (req, res) {
                 res.send("No data found");
             }
         }
+          //  res.send(checkstatus);
+            db.close();
+        });
     });
-});
-
-//getting orders from the current restaurent
-app.post('/updateorders', function (req, res) {
-    console.log("Inside the updateorders  backend page")
-
-    sql = "update  grubhubmain.Order  set status=? where orderid=? ";
-    console.log(req.body);
-    console.log(req.body.orderid);
-    console.log(req.body);
-    con.query(sql, [req.body.status,req.body.orderid], function (err, result) {
-        if (err) {
-            console.log("Error", err)
-            res.end("Not able to update to db--order owner")
-        }
-        else {
-            console.log("Order update suces")
-         
-                res.send("update success");
-            }
-        
-    });
-
-
-
-});
-
-
-
-app.post('/postitem', function (req, res) {
-    console.log("Inside the postitem  backend page")
 
     
-    var sql = "insert into grubhubmain.Item values (0,?,?,?,?,null,0)"
+});
 
-    con.query(sql, [req.body.itemName, user.id, req.body.section,req.body.itemPrice], function (err, result) {
-        if (err) {
-            console.log("Error", err)
-            res.end("Not able to update to db--order owner")
-        }
-        else {
-            console.log("Item update suces")
-         
-                res.send("update success");
-            }
-        
+//use req the res items
+app.post('/postitem', function (req, res) {  
+    console.log("Inside the postitem  backend page")
+
+var checkstatus="";
+    MongoClient.connect(url, async function (err, db) {
+        if (err) throw err;
+        var dbo = db.db("grubhub");
+        // var obj = { Name: req.body.itemName,Rid:user.id,Sections:req.body.section,Price:req.body.itemPrice, RestaurentName: user.restname,RestaurentImage:user.restimage, ItemImage: "" ,Cuisine:user.cuisine};
+        var obj = { Name: req.body.itemName,Rid: mongoose.Types.ObjectId(req.body.id),Sections:req.body.section,Price:req.body.itemPrice, RestaurentName: req.body.restname,RestaurentImage:req.body.restimage, ItemImage: "" ,Cuisine:req.body.cuisine};
+        await dbo.collection("Items").insertOne(obj, function (err, result) {
+            if (err) checkstatus = "Failed Item Insert"
+            else checkstatus = "Success Item inserted"
+            db.close();
+            res.end(checkstatus)
+        });
     });
-
-
-
 });
 //start your server on port 3001
 app.listen(3001);

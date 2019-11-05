@@ -32,20 +32,16 @@ class Restaurent extends Component {
                cart:[],
                globaltotal:0,
                cartvalue:"",
-               Items:{}
+               Items:{},
+               quantity:{}
 
                
              }
 
-            
-             
-      
         this.addquantitycheck=this.addquantitycheck.bind(this);
         this.deletequantitycheck=this.deletequantitycheck.bind(this);
         this.checkouthandler=this.checkouthandler.bind(this);
-      
-      
-      }
+   }
     
           
     
@@ -83,6 +79,25 @@ var i;
                 this.setState({
                   Items:response.data,    
             })   
+           var tempobjects=response.data;
+            Object.keys(tempobjects).map((key)=>{
+                    tempobjects[key].map( (breakfast) =>{
+                     
+              var tempquantity=this.state.quantity;
+              tempquantity[breakfast._id]=0;
+              this.setState(
+                {
+                  quantity:tempquantity
+                }
+              )
+         
+          
+       
+        
+        })
+        
+      })
+
             console.log(response.data)
           
           }
@@ -180,12 +195,17 @@ console.log(":inside checkout handler")
 
   axios.defaults.withCredentials = true;
 
-       
+  
   const data={
-      order:this.state.cartvalue
+      order:this.state.cartvalue,
+      name: localStorage.getItem('name_buyer'),
+      id:localStorage.getItem('buyer_id'),
+      rid:localStorage.getItem('rest_id'),
+      restname:localStorage.getItem('restimage'),
+      restimage:localStorage.getItem('restname'),
   }
 
-  axios.post('http://localhost:3001/postorder/', data)
+  axios.post('http://localhost:3001/orders/postorder/', data)
   .then(response=>{
     
      console.log("response  ",response);
@@ -216,35 +236,50 @@ addquantitycheck=(val1)=>
 {  
 
   console.log("checking handler");
-  var twan=this.state.quan;
-  twan[val1]=twan[val1]+1;
+  var tempquantity=this.state.quantity;
+  tempquantity[val1]=tempquantity[val1]+1;
   console.log(val1);
   this.setState({
-    quan:twan
+    quantity:tempquantity
   });
  
   console.log("checking handler");
   console.log(val1);
   //console.log(val2);
- console.log(this.state.quan[val1]);
+ console.log(this.state.quantity[val1]);
+
+
+
+//  console.log("checking handler");
+//  var twan=this.state.quan;
+//  twan[val1]=twan[val1]+1;
+//  console.log(val1);
+//  this.setState({
+//    quan:twan
+//  });
+
+//  console.log("checking handler");
+//  console.log(val1);
+//  //console.log(val2);
+// console.log(this.state.quan[val1]);
 }
 
 deletequantitycheck=(val1)=>
 {  
 
   console.log("checking handler");
-  var twan=this.state.quan;
-  if(twan[val1]>0)
-  twan[val1]=twan[val1]-1;
+  var tempquantity=this.state.quantity;
+  if(tempquantity[val1]>0)
+  tempquantity[val1]=tempquantity[val1]-1;
   console.log(val1);
   this.setState({
-    quan:twan
+    quantity:tempquantity
   });
  
   console.log("checking handler");
   console.log(val1);
   //console.log(val2);
- console.log(this.state.quan[val1]);
+ console.log(this.state.quantity[val1]);
 
 }
 
@@ -264,15 +299,15 @@ deletequantitycheck=(val1)=>
     {
          this.state.Items[key].map( (breakfast) =>(
   
-       <Table.Row  key={breakfast.ItemId}>
+       <Table.Row  key={breakfast._id}>
        
-       <Table.Cell>{breakfast.name} </Table.Cell>
-       <Table.Cell>{breakfast.price}</Table.Cell>
-       <Table.Cell>    <button  onClick={()=>this.deletequantitycheck(breakfast.ItemId)}>Delete</button> </Table.Cell>
-        <Table.Cell>   <button onClick={()=>this.addquantitycheck(breakfast.ItemId)}>Add</button>  </Table.Cell>
-       <Table.Cell>    {this.state.quan[breakfast.ItemId]}</Table.Cell>
+       <Table.Cell>{breakfast.Name} </Table.Cell>
+       <Table.Cell>{breakfast.Price}</Table.Cell>
+       <Table.Cell>    <button  onClick={()=>this.deletequantitycheck(breakfast._id)}>Delete</button> </Table.Cell>
+        <Table.Cell>   <button onClick={()=>this.addquantitycheck(breakfast._id)}>Add</button>  </Table.Cell>
+       <Table.Cell>    {this.state.quantity[breakfast._id]}</Table.Cell>
        <Table.Cell>    </Table.Cell> 
-       <Table.Cell>    <button  onClick={()=>this.cartcheck(breakfast.ItemId,breakfast.name,breakfast.price,this.state.quan[breakfast.ItemId])}>Add To cart</button> </Table.Cell>
+       <Table.Cell>    <button  onClick={()=>this.cartcheck(breakfast._id,breakfast.Name,breakfast.Price,this.state.quantity[breakfast._id])}>Add To cart</button> </Table.Cell>
 
      </Table.Row>),
 )} 
@@ -314,7 +349,7 @@ deletequantitycheck=(val1)=>
               <Table.Cell>{cart.name} </Table.Cell>
                <Table.Cell>{cart.price}</Table.Cell>
              
-               <Table.Cell>    {cart.quantity}</Table.Cell>
+               <Table.Cell>  {cart.quantity}</Table.Cell>
                <Table.Cell>{cart.total}</Table.Cell>
              </Table.Row>),
 

@@ -11,6 +11,9 @@ import Signupowner from './Signupowner/Signupowner';
 import Ownerprofile from './Ownerprofile/Ownerprofile';
 import Mainpage from './Mainpage/Mainpage';
 import Ownerhome from './Ownerhome/Ownerhome';
+import Pastorderpage from './Pastorderpage/Pastorderpage';
+import RestaurentMenu from './RestaurentMenu/RestaurentMenu';
+import Upcomingorderpage from './Upcomingorderpage/Upcomingorderpage';
 
 //Create a Main Component
 class Main extends Component {
@@ -29,6 +32,9 @@ class Main extends Component {
                 <Route path="/signupowner" exact component ={Signupowner}/>
                 <Route path="/ownerhome/:email" exact component ={Ownerhome}/>
                 <Route path="/ownerprofile/:email1" exact component ={Ownerprofile}/>
+                <Route path="/pastorder" exact component ={Pastorderpage}/>
+                <Route path="/restaurentmenu" exact component ={RestaurentMenu}/>
+                <Route path="/upcomingorder" exact component ={Upcomingorderpage}/>
     
     
             </div>

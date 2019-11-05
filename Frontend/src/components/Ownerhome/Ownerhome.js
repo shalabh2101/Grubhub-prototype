@@ -31,8 +31,6 @@ class Ownerhome extends Component {
 
         this.updateorder=this.updateorder.bind(this);
         this.getcurrentorders=this.getcurrentorders.bind(this);
-       
-        
 
     }
 
@@ -68,6 +66,14 @@ class Ownerhome extends Component {
                         name: response.data.OwnerName,
 
                     })
+
+                   
+
+                    localStorage.setItem('rest_id',response.data._id);
+                    localStorage.setItem('restimage',response.data.RestaurentImage);
+                    localStorage.setItem('restname',response.data.Name);
+                    localStorage.setItem('cuisine',response.data.Cuisine);
+                    localStorage.setItem('restOwnerName',response.data.OwnerName);
                 }
                 else {
                     this.setState({
@@ -98,7 +104,7 @@ class Ownerhome extends Component {
 
 getcurrentorders=()=>{
     const data = {
-       // email: this.state.email,
+        id: localStorage.getItem('rest_id'),
         type: 'owner'
     }
 
@@ -162,7 +168,7 @@ updateorder=(currentstatus,id)=>
     axios.defaults.withCredentials = true;
 console.log(data);
 
-    axios.post('http://localhost:3001/updateorders', data)
+    axios.post('http://localhost:3001/orders/updateorders', data)
     .then(response => {
 
         console.log("response  ", response);
@@ -215,15 +221,15 @@ this.getcurrentorders();
                                 }))}
                                <td>
 
-                                <input type="radio" name={orderlist.Orderid} value="New" checked={ orderlist.status === 'n' } onChange={()=>this.updateorder('n',orderlist.Orderid)}/> New 
-                                <input type="radio" name={orderlist.Orderid} value="Preparing" checked={ orderlist.status === 'p'} onChange={()=>this.updateorder('p',orderlist.Orderid)}/>Preparing 
-                                <input type="radio" name={orderlist.Orderid} value="Ready" checked={ orderlist.status === 'r'} onChange={()=>this.updateorder('r',orderlist.Orderid)}/>Ready
-                                <input type="radio" name={orderlist.Orderid} value="Delivered" checked={ orderlist.status=== 'd'} onChange={()=>this.updateorder('d',orderlist.Orderid)}/> Delivered
+                                <input type="radio" name={orderlist._id} value="New" checked={ orderlist.status === 'n' } onChange={()=>this.updateorder('n',orderlist._id)}/> New 
+                                <input type="radio" name={orderlist._id} value="Preparing" checked={ orderlist.status === 'p'} onChange={()=>this.updateorder('p',orderlist._id)}/>Preparing 
+                                <input type="radio" name={orderlist._id} value="Ready" checked={ orderlist.status === 'r'} onChange={()=>this.updateorder('r',orderlist._id)}/>Ready
+                                <input type="radio" name={orderlist._id} value="Delivered" checked={ orderlist.status=== 'd'} onChange={()=>this.updateorder('d',orderlist._id)}/> Delivered
                                  
                               </td>
                             <td>
                             
-                                <button onClick={()=>this.updateorder('c',orderlist.Orderid)}>Cancel Order</button>
+                                <button onClick={()=>this.updateorder('c',orderlist._id)}>Cancel Order</button>
                                
                             </td>
                      </Table.Row>),

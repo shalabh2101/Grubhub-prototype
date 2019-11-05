@@ -37,15 +37,15 @@ class Buyerhome extends Component{
 })
 }
 
-componentDidMount=()=>{
+componentWillMount=()=>{
 
     console.log("Inside the component did mount")
     const data={
-        email:this.props.emailfromstore,
+        email:window.localStorage.getItem('buyer_email'),
         type:'buyer'
     }
     console.log("this is email",data.email)
-    console.log(this.props.emailfromstore)
+    
     axios.defaults.withCredentials = true;
     
     axios.post('http://localhost:3001/getdata', data)
@@ -57,6 +57,9 @@ componentDidMount=()=>{
             this.setState({
                    name:response.data.Name
         })  
+
+        window.localStorage.setItem('name_buyer',response.data.Name);
+
         }
         else {
             this.setState({

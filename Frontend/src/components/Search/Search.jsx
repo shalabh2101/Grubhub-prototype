@@ -121,22 +121,22 @@ class Search extends Component{
               </Table.Row>), */}
 
 {/* add image too */}
-          <Table.Body>  
+          <table cellspacing="40">  
             {this.state.fooditems.map( (fooditem) =>
                 
               
-                <tr key={fooditem.id}>
+                <tr key={fooditem._id}>
                 
-                   <Link to={`/restaurent/${fooditem.Id}` } className="Link" exact  class="navbar-brand" activeStyle={ {color:'red'}}>
-                       <td > {fooditem.Id}</td>
-                       <td>{fooditem.Cuisine}</td>  
-                       <td>  {fooditem.resname}  </td>
+                   <Link to={`/restaurent/${fooditem.Rid}` } className="Link" exact  class="navbar-brand" activeStyle={ {color:'red'}}>
+                       {/* <td > {fooditem._id}</td> */}
+                       <td >{fooditem.Cuisine}</td>  
+                      <td >  {fooditem.RestaurentName}  </td>
 
                    </Link>
                 </tr>
               
             )} 
-          </Table.Body>
+          </table>
     
                         {/* <div style={{width: '30%'}} className="form-group">
                             <input  onChange = {this.searchChangeHandler}  type="text" className="form-control" name="Search" placeholder="Search" value={this.state.search}></input>
