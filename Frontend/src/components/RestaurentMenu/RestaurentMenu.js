@@ -321,12 +321,17 @@ console.log("this.state.Items");
                     <nav class="navbar navbar-expand-lg navbar-dark primary-color">
 
                         <a class="navbar-brand" href="#" style={{ color: 'red' }}>GRUBHUB</a>
-                        <NavLink to="/userprofile" exact class="navbar-brand" activeStyle={{ color: 'red' }}>{this.state.name}</NavLink>
+                      
                         <a class="navbar-brand" style={{ color: 'blue' }} >{this.state.name}</a>
 
                     </nav>
                     {newitemDialog }
-                    <button onClick={()=>this.setState({dialogstatus:true,currentsection:""})}> New Item </button>
+
+
+                    <div style={{width: '30%'}}>
+                    <button className="btn btn-success" onClick={()=>this.setState({dialogstatus:true,currentsection:""})}> Add New Section </button>
+                    </div>
+                    
                     {Restitems}
 
                 </div>

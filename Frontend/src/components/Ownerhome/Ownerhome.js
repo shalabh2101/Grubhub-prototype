@@ -145,9 +145,6 @@ class Ownerhome extends Component {
          })
          })
 
-     
-
-
 
     }
 
@@ -325,13 +322,13 @@ handleClose=()=>
             
            {this.state.messeges.map( (fooditem) =>
                
-               <tr key={fooditem._id}>
+               <tr key={fooditem._id} className="display_tr">
                
  
-                     <td > FROM---  </td>
+                     <td ><b> FROM </b> </td>
                      <td >{fooditem.buyername}</td>  
                   
-                     <td > messege---  </td>
+                     <td > <b>messege</b></td>
                      <td > {fooditem.messege}  </td>
  
                 
@@ -385,27 +382,27 @@ handleClose=()=>
                     (
                         <Table.Row > Orders </Table.Row> ,
                          <Table.Row>
-                           <div>
+                           <div className="width-size">
                             <h3>{orderlist.Name}</h3>
-                            <input type="radio" name={orderlist._id} value="New" checked={ orderlist.status === 'n' } onChange={()=>this.updateorder('n',orderlist._id)}/> New 
-                                <input type="radio" name={orderlist._id} value="Preparing" checked={ orderlist.status === 'p'} onChange={()=>this.updateorder('p',orderlist._id)}/>Preparing 
-                                <input type="radio" name={orderlist._id} value="Ready" checked={ orderlist.status === 'r'} onChange={()=>this.updateorder('r',orderlist._id)}/>Ready
-                                <input type="radio" name={orderlist._id} value="Delivered" checked={ orderlist.status=== 'd'} onChange={()=>this.updateorder('d',orderlist._id)}/> Delivered
+                            <input type="radio" className="space" name={orderlist._id} value="New" checked={ orderlist.status === 'n' } onChange={()=>this.updateorder('n',orderlist._id)}/> New 
+                                <input type="radio" className="space" name={orderlist._id} value="Preparing" checked={ orderlist.status === 'p'} onChange={()=>this.updateorder('p',orderlist._id)}/>Preparing 
+                                <input type="radio" className="space" name={orderlist._id} value="Ready" checked={ orderlist.status === 'r'} onChange={()=>this.updateorder('r',orderlist._id)}/>Ready
+                                <input type="radio" className="space" name={orderlist._id} value="Delivered" checked={ orderlist.status=== 'd'} onChange={()=>this.updateorder('d',orderlist._id)}/> Delivered
                                  
 
                             </div>
                             { orderlist.Description.split("/").slice(1).map((element => {
                                     return <Table.Row>
-                                        <Table.Cell>Item name :{element.split(",")[0]}  </Table.Cell>
-                                        <Table.Cell> Price :{element.split(",")[1]}  </Table.Cell>
-                                        <Table.Cell> Quantity :{element.split(",")[2]}   </Table.Cell>
+                                        <Table.Cell><b>Item name :</b>{element.split(",")[0]}  </Table.Cell>
+                                        <Table.Cell><b>Price :</b>{element.split(",")[1]}  </Table.Cell>
+                                        <Table.Cell><b>Quantity :</b>{element.split(",")[2]}   </Table.Cell>
                                     </Table.Row>
                                 }))}
                                <td>
 
                                
                               </td>
-                            <td>
+                            <td className="pad_u">
                            
                                 <button onClick={()=>this.updateorder('c',orderlist._id)}>Cancel Order</button>
                                 <button onClick={()=>this.setState({dialogstatus:true,val1:orderlist.id,val2:orderlist.Rid,val3:orderlist.RestaurentName})}>  Send Messege </button>
@@ -431,9 +428,9 @@ handleClose=()=>
                               <h3>{orderlist.Name}</h3>
                                  { orderlist.Description.split("/").slice(1).map((element => {
                                          return <Table.Row>
-                                             <Table.Cell>Item name :{element.split(",")[0]}  </Table.Cell>
-                                             <Table.Cell> Price :{element.split(",")[1]}  </Table.Cell>
-                                             <Table.Cell> Quantity :{element.split(",")[2]}   </Table.Cell>
+                                             <Table.Cell><b>Item name :</b>{element.split(",")[0]}  </Table.Cell>
+                                             <Table.Cell> <b>Price :</b>{element.split(",")[1]}  </Table.Cell>
+                                             <Table.Cell> <b>Quantity :</b>{element.split(",")[2]}   </Table.Cell>
                                          </Table.Row>
                                      }))}
                                   
@@ -451,7 +448,7 @@ handleClose=()=>
 
                 <div className="container">
 
-                    <nav class="navbar navbar-expand-lg navbar-dark primary-color">
+                    <nav class="navbar navbar-expand-lg navbar-dark primary-color b_color">
                         <a class="navbar-brand" href="#" style={{ color: 'red' }}>GRUBHUB</a>
                         <NavLink to={url} exact class="navbar-brand" activeStyle={{ color: 'red' }}> Profile: {this.state.name}</NavLink>
                         <a class="navbar-brand" href="#" style={{ color: 'red' }}>       </a>
@@ -461,8 +458,7 @@ handleClose=()=>
                 
                     
                     <br></br>
-                    <br></br>
-                    <br></br>
+                    
                     {newitemDialog }
                     <div className="container" style={{color:'green'}}> 
                     <h2>Current Orders</h2>

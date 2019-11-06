@@ -739,9 +739,9 @@ componentWillMount = () => {
 
             var tempitem = element.split(",")
             return <Card>
-                 <CardText>   name {tempitem[0]} </CardText>
+                 <CardText><b>   name </b>{tempitem[0]} </CardText>
                  {/* <CardText>    Price {tempitem[1]} </CardText> */}
-                 <CardText>     Quantity {tempitem[2]} </CardText>
+                 <CardText>   <b>  Quantity </b>{tempitem[2]} </CardText>
             </Card>
         });
 
@@ -771,7 +771,7 @@ componentWillMount = () => {
                 {this.state.pastorder.map((pastorder) =>
                     (
                         <Col sm="12" >
-                        <Card body style={{ background: 'red' ,    color: 'azure',margin:'10px'}}>
+                        <Card body className="card_work" style={{color: 'azure',margin:'10px'}}>
                             <CardTitle ><h3>{pastorder.resname}</h3></CardTitle>
                             <CardText>{this.getitems(pastorder.orderitems)}</CardText>
                             <CardText><h4> status : {this.getstatus(pastorder.status)}</h4></CardText>
@@ -798,7 +798,7 @@ componentWillMount = () => {
                 {this.state.logout && <Redirect to='/signinbuyer' />}
 
                 <div className="container">
-                    <nav class="navbar navbar-expand-lg navbar-dark primary-color">
+                    <nav class="navbar navbar-expand-lg navbar-dark primary-color v">
                         <a class="navbar-brand" href="#" style={{ color: 'red' }}>GRUBHUB</a>
                         <NavLink to="/userprofile" exact class="navbar-brand" activeStyle={{ color: 'red' }}>{this.state.name}</NavLink>
                         <a class="navbar-brand" style={{ color: 'blue' }} >{this.state.name}</a>

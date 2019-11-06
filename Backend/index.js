@@ -25,26 +25,10 @@ var MongoClient =mongo.MongoClient;
 
 //var url="mongodb+srv://sneema7:Nmat@123@grubhub-fribs.mongodb.net/test?retryWrites=true&w=majority";
 
-//const url="mongodb://sneema7:Nmat@123@grubhub-shard-00-00-fribs.mongodb.net:27017,grubhub-shard-00-01-fribs.mongodb.net:27017,grubhub-shard-00-02-fribs.mongodb.net:27017/test?ssl=true&replicaSet=grubhub-shard-0&authSource=admin&retryWrites=true&w=majority"
-//const uri="mongodb+srv://sneema7:Nmat%40123@grubhub-fribs.mongodb.net/test?retryWrites=true&w=majority";
-//const uri="mongodb://sneema7:Nmat%40123@grubhub-shard-00-00-fribs.mongodb.net:27017,grubhub-shard-00-01-fribs.mongodb.net:27017,grubhub-shard-00-02-fribs.mongodb.net:27017/test?ssl=true&replicaSet=grubhub-shard-0&authSource=admin&retryWrites=true&w=majority"
-//client=new  MongoClient(uri, { useNewUrlParser: true });
+
 
 var url = "mongodb://localhost:27017/";
-// MongoClient.connect(url, {
-//     useNewUrlParser: true,
-//     useCreateIndex: true,
-//     useUnifiedTopology: true
-//   });
 
-  //const MongoClient=mongoose.connection
-
-  //const MongoClient = mongoose.connection;
-//   MongoClient.connection.once("open", () => {
-//   console.log("Mongo DB connection is successful");
-// });
-
-//const client = new MongoClient(url, { useNewUrlParser: true });
 
 MongoClient.connect(url, function (err, db) {
     if (err) {
@@ -94,88 +78,12 @@ app.use("/getdata",data);
 app.use("/signinbuyer",login);
 
 
-//use the email in req    ,
-// app.post('/getdata', function (req, res) {
-//     console.log("Inside the getting name method")
-//     console.log("  session email " + user.email)
 
-//     console.log("req body  ", req.body)
-
-  
-//  var checkstatus = "";
-//     if (req.body.type === 'buyer') {
-//         MongoClient.connect(url, async function (err, db) {
-//             if (err) throw err;
-//             var dbo = db.db("grubhub");
-//             console.log("user.email");
-//            // console.log(user.email);
-            
-//        //     var obj = { Email: user.email };
-//             var obj = { Email: req.body.email };
-//             await dbo.collection("userprofile").find(obj).toArray( function (err, result) {
-//                 if (err) checkstatus = "Failed Getdata in Buyer"
-//                 else {
-//                     console.log("result[0]");
-//                     console.log(result[0]);
-//                     res.send(result[0]);
-//                     checkstatus = result[0];
-
-//                     //store the info of buyer here 
-//                     //id , Name, Email, Password, Phonenumber, Imagelocation
-//               }
-//                 db.close();
-//             });
-//         });
-       
-//     }
-//     else {
-
-//         MongoClient.connect(url, async function (err, db) {
-//             if (err) throw err;
-//             var dbo = db.db("grubhub");
-//             var obj = { Email: req.body.email };
-//             await dbo.collection("Restaurent").find(obj).toArray (function (err, result) {
-//                 if (err) checkstatus = "Failed Getdata in Buyer"
-//                 else {
-//                     if (result.length != 0) {
-//                         checkstatus = result[0];
-//                         user.id = result[0]._id;
-//                         user.restimage=result[0].RestaurentImage;
-//                         user.restname=result[0].Name;
-//                         user.cuisine=result[0].Cuisine;
-//                     }
-//                     else
-//                         checkstatus = "No record found";
-                  
-
-//                 }
-//                 db.close();
-//                 res.send(checkstatus);
-
-//             });
-//         });
-     
-
-//     }
-// });
 
 
 app.post('/postorder', function (req, res) {
 
-    // var checkstatus="";
-    // MongoClient.connect(url, async function (err, db) {
-    //     if (err) throw err;
-    //     var dbo = db.db("grubhub");
-    //     // var obj = { Name: user.name,id:user.id, Rid:user.rid,Description:req.body.order, RestaurentName: user.restname,RestaurentImage:user.restimage,status:'n'};
-    //     var obj = { Name: req.body.name,id:req.body.id, Rid:req.body.rid,Description:req.body.order, RestaurentName: req.body.restname,RestaurentImage:req.body.restimage,status:'n'};
-    //     await dbo.collection("Orders").insertOne(obj, function (err, result) {
-    //         if (err) checkstatus = "Failed Order Insert"
-    //         else checkstatus = "Success Order inserted"
-    //         db.close();
-    //         res.end(checkstatus)
-    //     });
-
-    // });
+    
 
     kafka.make_request("PostOrder_topic",req.body,function(err,results){
         console.log("--------Inside Past Orders request----------");
@@ -205,62 +113,7 @@ app.post('/postmessege', function (req, res) {
 
 });
 
-// //only set in response
-// app.post('/signinbuyer', function (req, res) {
 
-//     console.log("Inside the buyer/owner sign IN page");
-//     console.log(req.body);
-
-//     var collectionString = "";
-//     if (req.body.type === 'buyer')
-//         collectionString = "userprofile";
-//     else
-//         collectionString = "Restaurent";
-
-//         var data={};
-//        data.check=false;
-//         var checkstatus = "";
-//        MongoClient.connect(url,async function (err, db) {
-//         if (err) throw err;
-//         var dbo = db.db("grubhub");
-//         var query = { Email: req.body.email };
-//       await  dbo.collection(collectionString).find(query).toArray(function (err, result) {
-//             if (err) throw err;
-//             else {
-//                 if (result.length === 0)
-//                     checkstatus = "No data";
-//                 else {
-//                     console.log(result);
-//                     if (req.body.password === result[0].Password) {
-//                         checkstatus = "Success";
-          
-//                         user.email = req.body.email;
-//                         user.id = result[0]._id;
-
-
-//                      //   data.email=req.body.email;
-//                         data.id=result[0]._id,
-//                         data.check=true;
-//                         data.name=result[0].Name;
-//                         // STORE THE INFORMATION OF BOTH USER AND RESTAURENT OWNER HERE
-//                     }
-//                     else
-//                         checkstatus = "Incorrect Password";
-//                 }
-
-//             }
-//             data.messege=checkstatus
-//            // res.send(checkstatus);
-//            res.send(data);
-//             db.close();
-//         });
-//     });
-
-  
-// });
-
-//from where it is calling
-//use owner id in req and set rid in response
 app.post('/getrestaurentmenu', function (req, res) {
 
     //*****handle errors */ HANDLING ERROR OF SQL
@@ -399,34 +252,6 @@ app.post('/getpastorders', function (req, res) {
 app.post('/getResOrders', function (req, res) {
     console.log("Inside the getResOrders  backend page")
 
-//  MongoClient.connect(url,async function (err, db) {
-//         if (err) throw err;
-//         var dbo = db.db("grubhub");
-//       console.log(user.id);
-//       query = {Rid:  mongoose.Types.ObjectId(req.body.id)   };
-//          // query = {Rid:  mongoose.Types.ObjectId(user.id)   };
-         
-//       //  var query = { Name: req.body.food };
-//       await  dbo.collection("Orders").find(query).toArray(function (err, result) {
-//         if (err) {
-//             console.log("Error", err)
-//             res.end("Not able to connect to db--order buyer")
-//         }
-//         else {
-//             console.log("Order Success")
-//             if (result.length >= 1) {
-//                 console.log("GET RESTAURENT ORDERS")
-//                 console.log(result);
-//                 res.send(result);
-//             }
-//             else {
-//                 res.send("No data found");
-//             }
-//         }
-//           //  res.send(checkstatus);
-//             db.close();
-//         });
-//     });
 
 
 kafka.make_request("resOrder_topic",req.body,function(err,results){

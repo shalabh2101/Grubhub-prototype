@@ -175,13 +175,13 @@ render(){
            
           {this.state.messeges.map( (fooditem) =>
               
-              <tr key={fooditem._id}>
+              <tr key={fooditem._id} className="display_tr">
               
 
-                    <td > --FROM---  </td>
+                    <td > <b>FROM</b></td>
                     <td >{fooditem.restname}</td>  
                  
-                    <td > --messege---  </td>
+                    <td ><b>messege</b></td>
                     <td > {fooditem.messege}  </td>
 
                
