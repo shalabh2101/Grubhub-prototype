@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 
 const mapStateToProps = state => {
-  return { listchecks: state.listchecks };
+  return { email: state.listchecks };
 };
 
 const Reduxcomp = ({ listchecks }) => (
