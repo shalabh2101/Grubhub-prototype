@@ -6,6 +6,7 @@ var mongoose = require('mongoose');
 var mongo = require('mongodb');
 
 var MongoClient = mongo.MongoClient;
+//var url="mongodb+srv://sneema7:Nmat@123@grubhub-fribs.mongodb.net/test?retryWrites=true&w=majority";
 var url = "mongodb://localhost:27017/";
 
 router.post('/', function (req, res) {

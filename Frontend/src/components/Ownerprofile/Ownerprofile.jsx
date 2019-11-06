@@ -195,19 +195,20 @@ render(){
         <div>
            
             <br/>
+                
+                
+              <nav class="navbar navbar-expand-lg navbar-dark primary-color">
+
+               
+                <NavLink to="/buyerhome"  exact activeStyle={ {color:'red'}}>GRUBHUB</NavLink>
+
+                </nav>
+
                 <h2 style={{color: 'red',
                     marginTop: '0%',
                     marginLeft: '2%'}}>
                     User Profile Page
                 </h2>
-                
-              <nav class="navbar navbar-expand-lg navbar-dark primary-color">
-
-                <a class="navbar-brand" onClick={<Redirect to ="/buyerhome"/>} style ={{color:'red'} }>GRUBHUB</a>
-                <NavLink to="/buyerhome"  exact activeStyle={ {color:'red'}}>GRUBHUB</NavLink>
-
-                </nav>
-
              <div>
                     
                 </div>

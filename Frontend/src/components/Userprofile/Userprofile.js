@@ -155,18 +155,26 @@ render(){
         <div>
            
             <br/>
-                <h2 style={{color: 'red',
-                    marginTop: '0%',
-                    marginLeft: '2%'}}>
-                    User Profile Page
-                </h2>
+                
                 
               <nav class="navbar navbar-expand-lg navbar-dark primary-color">
 
-                <a class="navbar-brand" onClick={<Redirect to ="/buyerhome"/>} style ={{color:'red'} }>GRUBHUB</a>
-                <NavLink to="/buyerhome"  exact activeStyle={ {color:'red'}}>GRUBHUB</NavLink>
+                
+                <NavLink to="/buyerhome"  exact activeStyle={ {color:'red'}}> <h2 style={{color: 'red',
+                    marginTop: '0%',
+                    marginLeft: '2%'}}>
+                    GRUBHUB
+                </h2></NavLink>
 
                 </nav>
+
+                <div className="container" style={{textAlign:'-webkit-center'}}> 
+                <h3 style={{color: 'grey',
+                    marginTop: '0%',
+                    marginLeft: '2%'}}>
+                    User Profile Page
+                </h3>
+                </div>
 
              <div>
                     
@@ -174,7 +182,7 @@ render(){
                <div className="container" style={{textAlign:'-webkit-center'}}> 
 
                <div style={{width: '30%'}} >
-                        <label >Email:{this.state.email}</label>
+                        <label >Name:{localStorage.getItem('name_buyer')}</label>
                     </div>
                     <br/>   
              
@@ -185,7 +193,7 @@ render(){
                         : null}
 
                     <div style={{width: '30%'}} className="form-group">
-                        <input  onChange = {this.nameChangeHandler}  type="text" className="form-control" name="name" placeholder="Name" value={this.state.name}></input>
+                        <input  onChange = {this.nameChangeHandler}  type="text" className="form-control" name="name" placeholder="Email" value={this.state.name}></input>
                     </div>
                     <br/>    
                 

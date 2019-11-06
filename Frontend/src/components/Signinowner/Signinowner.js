@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import { Redirect ,Link, NavLink} from 'react-router-dom'
-
+import Background from '../../images/new.jpeg';
 
 
 
@@ -105,11 +105,7 @@ render(){
       
               { this.state.shift && <Redirect to={url}/>}
             <br/>
-                <h2 style={{color: 'red',
-    marginTop: '0%',
-    marginLeft: '2%'}}>
-                    GRUBHUB
-                </h2>
+                
                 
 <nav class="navbar navbar-expand-lg navbar-dark primary-color">
 
@@ -117,9 +113,11 @@ render(){
 
 </nav>
 
-
-                <div>
-                    
+<div style ={{backgroundImage: `url(${Background})`,
+height: '300px'}}></div>
+                
+                <div className="container" style={{textAlign:'-webkit-center'}}> 
+                    <h2>Owner Sign In</h2>
                 </div>
                <div className="container" style={{textAlign:'-webkit-center'}}> 
              

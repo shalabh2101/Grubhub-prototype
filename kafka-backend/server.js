@@ -9,6 +9,9 @@ var Books = require('./services/books.js');
 var signupService=require('./services/signupService.js');
 var loginService=require('./services/loginService.js');
 var PastOrderService=require('./services/PastOrderService.js');
+var DataService=require('./services/DataService.js');
+var ResOrderService=require('./services/ResOrderService.js');
+var Postorders=require('./services/Postorders.js');
 
 function handleTopicRequest(topic_name,fname){
     //var topic_name = 'root_topic';
@@ -23,7 +26,7 @@ function handleTopicRequest(topic_name,fname){
         switch(topic_name)
         {
             case 'signup_topic' : 
-            signpService.handle_request(data.data,function(err,res){
+            signupService.handle_request(data.data,function(err,res){
                 response(data,res,producer);
                 return ;
                })
@@ -43,6 +46,29 @@ function handleTopicRequest(topic_name,fname){
                })
             break;
 
+            case 'data_topic' : 
+            DataService.handle_request(data.data,function(err,res){
+                response(data,res,producer);
+                return ;
+               })
+            break;
+
+            case 'resOrder_topic' : 
+            ResOrderService.handle_request(data.data,function(err,res){
+                response(data,res,producer);
+                return ;
+               })
+            break;
+
+            case 'PostOrder_topic' : 
+            Postorders.handle_request(data.data,function(err,res){
+                response(data,res,producer);
+                return ;
+               })
+            break;
+
+
+            
             
         }
         
@@ -75,5 +101,9 @@ function response(data,res,producer){
 handleTopicRequest("signup_topic",signupService);
 handleTopicRequest("login_topic",loginService);
 handleTopicRequest("pastOrder_topic",PastOrderService);
+handleTopicRequest("data_topic",DataService);
+handleTopicRequest("resOrder_topic",ResOrderService);
+handleTopicRequest("PostOrder_topic",Postorders);
+
 
 

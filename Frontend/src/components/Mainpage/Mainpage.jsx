@@ -28,11 +28,7 @@ render(){
                     GRUBHUB
                 </h2>
                 
-<nav class="navbar navbar-expand-lg navbar-dark primary-color" >
 
-    <a class="navbar-brand" href="#" style ={{color:'red'}}>GRUBHUB</a>
-
-</nav>
         
 <div style ={{backgroundImage: `url(${Background})`,
 height: '400px'}}>

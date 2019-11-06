@@ -740,27 +740,29 @@ componentWillMount = () => {
             var tempitem = element.split(",")
             return <Card>
                  <CardText>   name {tempitem[0]} </CardText>
-                 <CardText>    Price {tempitem[1]} </CardText>
+                 {/* <CardText>    Price {tempitem[1]} </CardText> */}
                  <CardText>     Quantity {tempitem[2]} </CardText>
             </Card>
-           
-            
-            // <Table.Row>
-            //     <Table.Cell>
-            //          name {tempitem[0]}
-            //     </Table.Cell>
-            //     <Table.Cell>
-            //         Price {tempitem[1]}
-            //     </Table.Cell>
-            //     <Table.Cell>
-            //         Quantity {tempitem[2]}
-            //     </Table.Cell>
-            // </Table.Row>
         });
 
 
     }
-    render() {
+
+    getstatus = (item) => {
+       if(item==='n')
+         return 'New';
+       
+         else if(item==='p')
+         return 'Preparing';
+         
+
+         else if(item==='r')
+         return 'Ready';
+        
+  }
+    
+  
+  render() {
 
   let orderlist;
         console.log(" Inside Render -this.state.pastorder ", this.state.pastorder)
@@ -770,9 +772,9 @@ componentWillMount = () => {
                     (
                         <Col sm="12" >
                         <Card body style={{ background: 'red' ,    color: 'azure',margin:'10px'}}>
-                            <CardTitle >{pastorder.resname}</CardTitle>
+                            <CardTitle ><h3>{pastorder.resname}</h3></CardTitle>
                             <CardText>{this.getitems(pastorder.orderitems)}</CardText>
-                            
+                            <CardText><h4> status : {this.getstatus(pastorder.status)}</h4></CardText>
                         </Card>
 
                         {/* <Table.Row>
@@ -807,9 +809,7 @@ componentWillMount = () => {
 
                     {orderlist}
 
-                    <div style={{ width: '30%' }}>
-                        <button className="btn btn-success"  >Log out</button>
-                    </div>
+                    
                 </div>
             </div>
         )

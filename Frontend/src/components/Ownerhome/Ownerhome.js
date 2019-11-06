@@ -173,7 +173,6 @@ getcurrentorders=()=>{
             var l1=[];
             var l2=[];
             
-//async await can be call
           response.data.forEach(element => {
                 if(element.status==='d')
                 l1.push(element);
@@ -329,10 +328,10 @@ handleClose=()=>
                <tr key={fooditem._id}>
                
  
-                     <td > --FROM---  </td>
-                     <td >{fooditem.restname}</td>  
+                     <td > FROM---  </td>
+                     <td >{fooditem.buyername}</td>  
                   
-                     <td > --messege---  </td>
+                     <td > messege---  </td>
                      <td > {fooditem.messege}  </td>
  
                 
@@ -386,7 +385,15 @@ handleClose=()=>
                     (
                         <Table.Row > Orders </Table.Row> ,
                          <Table.Row>
-                            <h2>{orderlist.Name}</h2>
+                           <div>
+                            <h3>{orderlist.Name}</h3>
+                            <input type="radio" name={orderlist._id} value="New" checked={ orderlist.status === 'n' } onChange={()=>this.updateorder('n',orderlist._id)}/> New 
+                                <input type="radio" name={orderlist._id} value="Preparing" checked={ orderlist.status === 'p'} onChange={()=>this.updateorder('p',orderlist._id)}/>Preparing 
+                                <input type="radio" name={orderlist._id} value="Ready" checked={ orderlist.status === 'r'} onChange={()=>this.updateorder('r',orderlist._id)}/>Ready
+                                <input type="radio" name={orderlist._id} value="Delivered" checked={ orderlist.status=== 'd'} onChange={()=>this.updateorder('d',orderlist._id)}/> Delivered
+                                 
+
+                            </div>
                             { orderlist.Description.split("/").slice(1).map((element => {
                                     return <Table.Row>
                                         <Table.Cell>Item name :{element.split(",")[0]}  </Table.Cell>
@@ -396,11 +403,7 @@ handleClose=()=>
                                 }))}
                                <td>
 
-                                <input type="radio" name={orderlist._id} value="New" checked={ orderlist.status === 'n' } onChange={()=>this.updateorder('n',orderlist._id)}/> New 
-                                <input type="radio" name={orderlist._id} value="Preparing" checked={ orderlist.status === 'p'} onChange={()=>this.updateorder('p',orderlist._id)}/>Preparing 
-                                <input type="radio" name={orderlist._id} value="Ready" checked={ orderlist.status === 'r'} onChange={()=>this.updateorder('r',orderlist._id)}/>Ready
-                                <input type="radio" name={orderlist._id} value="Delivered" checked={ orderlist.status=== 'd'} onChange={()=>this.updateorder('d',orderlist._id)}/> Delivered
-                                 
+                               
                               </td>
                             <td>
                            
@@ -425,7 +428,7 @@ handleClose=()=>
                          (
                              <Table.Row > Orders </Table.Row> ,
                               <Table.Row>
-     
+                              <h3>{orderlist.Name}</h3>
                                  { orderlist.Description.split("/").slice(1).map((element => {
                                          return <Table.Row>
                                              <Table.Cell>Item name :{element.split(",")[0]}  </Table.Cell>
@@ -451,26 +454,33 @@ handleClose=()=>
                     <nav class="navbar navbar-expand-lg navbar-dark primary-color">
                         <a class="navbar-brand" href="#" style={{ color: 'red' }}>GRUBHUB</a>
                         <NavLink to={url} exact class="navbar-brand" activeStyle={{ color: 'red' }}> Profile: {this.state.name}</NavLink>
-                    </nav>
-
-                    <nav class="navbar navbar-expand-lg navbar-dark primary-color">
-                        <a class="navbar-brand" href="#" style={{ color: 'red' }}>GRUBHUB</a>
+                        <a class="navbar-brand" href="#" style={{ color: 'red' }}>       </a>
                         <NavLink to={menuurl} exact class="navbar-brand" activeStyle={{ color: 'red' }}> Menu </NavLink>
                     </nav>
+
+                
                     
                     <br></br>
                     <br></br>
                     <br></br>
                     {newitemDialog }
-                        <p>Current Orders</p>
+                    <div className="container" style={{color:'green'}}> 
+                    <h2>Current Orders</h2>
+                </div>
+                        
 
                              {runningorder}
 
-                        <p>Past Orders</p>
+                             <div className="container" style={{color:'green'}}> 
+                             <h2>Past Orders</h2>
+                </div>
+                       
                              {DeliveredOrder}
 
-
-                             <p>Messeges</p>
+                             <div className="container" style={{color:'red'}}> 
+                             <h2>Messeges</h2>
+                </div>
+                            
                              {messegelist}
 
                 <div style={{ width: '30%' }}>

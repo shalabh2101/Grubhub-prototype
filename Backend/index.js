@@ -16,28 +16,46 @@ const login=require("./routes/login");
 
 var mongoose = require('mongoose');
 
+//var MongoClient = require('mongoose');
+
 var mongo = require('mongodb');
 
-var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://localhost:27017/";
+var MongoClient =mongo.MongoClient;
+//var Client =mongo.MongoClient;
 
+//var url="mongodb+srv://sneema7:Nmat@123@grubhub-fribs.mongodb.net/test?retryWrites=true&w=majority";
+
+//const url="mongodb://sneema7:Nmat@123@grubhub-shard-00-00-fribs.mongodb.net:27017,grubhub-shard-00-01-fribs.mongodb.net:27017,grubhub-shard-00-02-fribs.mongodb.net:27017/test?ssl=true&replicaSet=grubhub-shard-0&authSource=admin&retryWrites=true&w=majority"
+//const uri="mongodb+srv://sneema7:Nmat%40123@grubhub-fribs.mongodb.net/test?retryWrites=true&w=majority";
+//const uri="mongodb://sneema7:Nmat%40123@grubhub-shard-00-00-fribs.mongodb.net:27017,grubhub-shard-00-01-fribs.mongodb.net:27017,grubhub-shard-00-02-fribs.mongodb.net:27017/test?ssl=true&replicaSet=grubhub-shard-0&authSource=admin&retryWrites=true&w=majority"
+//client=new  MongoClient(uri, { useNewUrlParser: true });
+
+var url = "mongodb://localhost:27017/";
+// MongoClient.connect(url, {
+//     useNewUrlParser: true,
+//     useCreateIndex: true,
+//     useUnifiedTopology: true
+//   });
+
+  //const MongoClient=mongoose.connection
+
+  //const MongoClient = mongoose.connection;
+//   MongoClient.connection.once("open", () => {
+//   console.log("Mongo DB connection is successful");
+// });
+
+//const client = new MongoClient(url, { useNewUrlParser: true });
 
 MongoClient.connect(url, function (err, db) {
-    if (err) throw err;
-    console.log("Mongo connected")
+    if (err) {
+        console.log("Mongo not connected ",err);
+    }
+    else
+    {console.log("Mongo connected ")}
 
 });
 
-var user = {
-    name: "",
-    email: "",
-    id: "",
-    rid: "",
-    restimage:"",
-    cuisine:"",
-    restname:"",
 
-}
 
 //use cors to allow cross origin resource sharing
 app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
@@ -144,25 +162,26 @@ app.use("/signinbuyer",login);
 
 app.post('/postorder', function (req, res) {
 
-    console.log("user details are ", user.email);
-    console.log("user details are ", user.name);
-    console.log("user details are ", user.id);
-    console.log("user details are ", user.rid);
+    // var checkstatus="";
+    // MongoClient.connect(url, async function (err, db) {
+    //     if (err) throw err;
+    //     var dbo = db.db("grubhub");
+    //     // var obj = { Name: user.name,id:user.id, Rid:user.rid,Description:req.body.order, RestaurentName: user.restname,RestaurentImage:user.restimage,status:'n'};
+    //     var obj = { Name: req.body.name,id:req.body.id, Rid:req.body.rid,Description:req.body.order, RestaurentName: req.body.restname,RestaurentImage:req.body.restimage,status:'n'};
+    //     await dbo.collection("Orders").insertOne(obj, function (err, result) {
+    //         if (err) checkstatus = "Failed Order Insert"
+    //         else checkstatus = "Success Order inserted"
+    //         db.close();
+    //         res.end(checkstatus)
+    //     });
 
-    var checkstatus="";
-    MongoClient.connect(url, async function (err, db) {
-        if (err) throw err;
-        var dbo = db.db("grubhub");
-        // var obj = { Name: user.name,id:user.id, Rid:user.rid,Description:req.body.order, RestaurentName: user.restname,RestaurentImage:user.restimage,status:'n'};
-        var obj = { Name: req.body.name,id:req.body.id, Rid:req.body.rid,Description:req.body.order, RestaurentName: req.body.restname,RestaurentImage:req.body.restimage,status:'n'};
-        await dbo.collection("Orders").insertOne(obj, function (err, result) {
-            if (err) checkstatus = "Failed Order Insert"
-            else checkstatus = "Success Order inserted"
-            db.close();
-            res.end(checkstatus)
-        });
+    // });
 
+    kafka.make_request("PostOrder_topic",req.body,function(err,results){
+        console.log("--------Inside Past Orders request----------");
+        return res.status(200).send(results);
     });
+   
 
 });
 
@@ -294,7 +313,7 @@ app.post('/getrestaurentmenu', function (req, res) {
                     console.log(finalresult);
                     res.send(finalresult);
     
-                    user.rid = result[0].Rid;
+                    
                  
                 }
                 else {
@@ -381,35 +400,42 @@ app.post('/getpastorders', function (req, res) {
 app.post('/getResOrders', function (req, res) {
     console.log("Inside the getResOrders  backend page")
 
- MongoClient.connect(url,async function (err, db) {
-        if (err) throw err;
-        var dbo = db.db("grubhub");
-      console.log(user.id);
-      query = {Rid:  mongoose.Types.ObjectId(req.body.id)   };
-         // query = {Rid:  mongoose.Types.ObjectId(user.id)   };
+//  MongoClient.connect(url,async function (err, db) {
+//         if (err) throw err;
+//         var dbo = db.db("grubhub");
+//       console.log(user.id);
+//       query = {Rid:  mongoose.Types.ObjectId(req.body.id)   };
+//          // query = {Rid:  mongoose.Types.ObjectId(user.id)   };
          
-      //  var query = { Name: req.body.food };
-      await  dbo.collection("Orders").find(query).toArray(function (err, result) {
-        if (err) {
-            console.log("Error", err)
-            res.end("Not able to connect to db--order buyer")
-        }
-        else {
-            console.log("Order Success")
-            if (result.length >= 1) {
-                console.log("GET RESTAURENT ORDERS")
-                console.log(result);
-                res.send(result);
-            }
-            else {
-                res.send("No data found");
-            }
-        }
-          //  res.send(checkstatus);
-            db.close();
-        });
-    });
+//       //  var query = { Name: req.body.food };
+//       await  dbo.collection("Orders").find(query).toArray(function (err, result) {
+//         if (err) {
+//             console.log("Error", err)
+//             res.end("Not able to connect to db--order buyer")
+//         }
+//         else {
+//             console.log("Order Success")
+//             if (result.length >= 1) {
+//                 console.log("GET RESTAURENT ORDERS")
+//                 console.log(result);
+//                 res.send(result);
+//             }
+//             else {
+//                 res.send("No data found");
+//             }
+//         }
+//           //  res.send(checkstatus);
+//             db.close();
+//         });
+//     });
 
+
+kafka.make_request("resOrder_topic",req.body,function(err,results){
+    console.log("--------Inside Res Orders request----------");
+    return res.status(200).send(results);
+
+
+});
     
 });
 

@@ -1,22 +1,16 @@
-const express =require("express");
-const router=express.Router();
-var kafka=require("../kafka/client")
+var mongo = require('mongodb');
+var MongoClient = mongo.MongoClient;
 var mongoose = require('mongoose');
 
-var mongo = require('mongodb');
-
-var MongoClient = mongo.MongoClient;
-//var url="mongodb+srv://sneema7:Nmat@123@grubhub-fribs.mongodb.net/test?retryWrites=true&w=majority";
 var url = "mongodb://localhost:27017/";
 
-router.post('/', function (req, res) {
+function handle_request(msg, callback){
+    
 
-console.log("Inside the getting name method")
- console.log("req body  ", req.body)
+    console.log("----getting Data --------")
 
-  
- var checkstatus = "";
-    if (req.body.type === 'buyer') {
+    var checkstatus = "";
+    if (msg.type === 'buyer') {
         MongoClient.connect(url, async function (err, db) {
             if (err) throw err;
             var dbo = db.db("grubhub");
@@ -24,13 +18,14 @@ console.log("Inside the getting name method")
            // console.log(user.email);
             
        //     var obj = { Email: user.email };
-            var obj = { Email: req.body.email };
+            var obj = { Email: msg.email };
             await dbo.collection("userprofile").find(obj).toArray( function (err, result) {
                 if (err) checkstatus = "Failed Getdata in Buyer"
                 else {
                     console.log("result[0]");
                     console.log(result[0]);
-                    res.send(result[0]);
+                   // res.send(result[0]);
+                   callback(null, result[0]);
                     checkstatus = result[0];
 
                     //store the info of buyer here 
@@ -46,7 +41,7 @@ console.log("Inside the getting name method")
         MongoClient.connect(url, async function (err, db) {
             if (err) throw err;
             var dbo = db.db("grubhub");
-            var obj = { Email: req.body.email };
+            var obj = { Email: msg.email };
             await dbo.collection("Restaurent").find(obj).toArray (function (err, result) {
                 if (err) checkstatus = "Failed Getdata in Buyer"
                 else {
@@ -63,21 +58,22 @@ console.log("Inside the getting name method")
 
                 }
                 db.close();
-                res.send(checkstatus);
-
+               // res.send(checkstatus);
+               callback(null, "checkstatus");
+               return;
             });
         });
      
 
     }
 
-// kafka.make_request("data_topic",req.body,function(err,results){
-//     console.log("--------Inside login request----------");
-//     return res.status(200).send(results);
-// })
+}
+
+exports.handle_request=handle_request
 
 
 
-});
 
-module.exports=router;
+
+
+

@@ -80,11 +80,6 @@ signUpBuyerCheck=(e)=>{
 
 }
 
-//functions for connecting backend
-//password
-//a new second field of password can be made, in which chek can be applied of password matchjng, then the condition of alpha numeric and more
-
-//render the functionality
 render(){
     return(
         <div>

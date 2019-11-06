@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Redirect ,Link, NavLink} from 'react-router-dom'
 import { connect } from "react-redux";
 import { checklogin } from "../../actions/index.js";
+import Background from '../../images/new.jpeg';
 
 
 class Buyerhome extends Component{
@@ -204,11 +205,24 @@ render(){
                     
                     <nav class="navbar navbar-expand-lg navbar-dark primary-color">
 
-                         <a class="navbar-brand" href="#" style ={{color:'red'}}>GRUBHUB</a>
-                         <NavLink to="/userprofile"  exact  class="navbar-brand" activeStyle={ {color:'red'}}> Profile:{this.state.name}</NavLink>
-                       
-
+                    <a class="navbar-brand" href="#" style ={{color:'red'}}>GRUBHUB</a>
+                    <div style={{width: '30%'}}>
+                        <button  className="btn btn-success"  >Log out</button>
+                    </div>
                     </nav>
+
+
+                    
+
+
+<div style ={{backgroundImage: `url(${Background})`,
+height: '300px'}}></div>
+
+
+            
+            <div className="container" style={{textAlign:'-webkit-center'}}> 
+                <h2>User Dashboard </h2>
+            </div>
 
                     <div style={{width: '30%'}} className="form-group">
                         <input  onChange = {this.searchChangeHandler}  type="text" className="form-control" name="Search" placeholder="Search" value={this.state.search}></input>
@@ -224,14 +238,6 @@ render(){
 
                     <br/>
                     
-
-
-
-                    <div style={{width: '30%'}}>
-                        <button  className="btn btn-success"  >Log out</button>
-                    </div>
-
-
                     <nav class="navbar navbar-expand-lg navbar-dark primary-color">
 
 
@@ -240,7 +246,12 @@ render(){
 
 <NavLink to="/pastorder"  exact  class="navbar-brand" activeStyle={ {color:'red'}}> Past Orders</NavLink>
 <NavLink to="/upcomingorder"  exact  class="navbar-brand" activeStyle={ {color:'red'}}> Upcoming Orders</NavLink>
+<br></br>
+<br></br>
 
+<div className="container" > 
+                <h3>Messeges </h3>
+            </div>
    {messegelist}
 
 

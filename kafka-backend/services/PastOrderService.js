@@ -14,13 +14,12 @@ function handle_request(msg, callback){
         if (err) throw err;
         var dbo = db.db("grubhub");
          if (msg.type === 'd')
-         query = {id: mongoose.Types.ObjectId(msg.id),status:'d'};
-       //   query = {id:user.id,status:'d'};
+         query = {id: msg.id,status:'d'};
           else
-          query = {id:mongoose.Types.ObjectId(msg.id),status:{ $ne :'d'}};
-        //  query = {id:user.id,status:{ $ne :'d'}};
-    
-      //  var query = { Name: msg.food };
+          query = {id:msg.id,status:{ $ne :'d'}};
+        //  query = {id:mongoose.Types.ObjectId(msg.id),status:{ $ne :'d'}};
+       
+
       await  dbo.collection("Orders").find(query).toArray(function (err, result) {
         if (err) {
             console.log("Error", err)
@@ -42,8 +41,9 @@ function handle_request(msg, callback){
                     console.log("order is " + orders[0]);
     
                     const data = {
-                        resname: element.resname,
-                        orderitems: orders
+                        resname: element.RestaurentName,
+                        orderitems: orders,
+                        status:element.status
                     }
                     finalresult.push(data);
                 });

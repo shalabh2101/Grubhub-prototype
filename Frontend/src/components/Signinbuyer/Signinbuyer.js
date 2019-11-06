@@ -5,6 +5,7 @@ import Reduxcomponent from '../Reduxcomponent';
 import { connect } from "react-redux";
 import { checklogin } from "../../actions/index.js";
 import Buyerhome from "../Buyerhome/Buyerhome";
+import Background from '../../images/new.jpeg';
 
 // function mapDispatchToProps(dispatch) {
 //     return {
@@ -125,17 +126,18 @@ render(){
       
               { this.state.shift && <Redirect to='/buyerhome'/>}
             <br/>
-                <h2 style={{color: 'red',
-    marginTop: '0%',
-    marginLeft: '2%'}}>
-                    GRUBHUB
-                </h2>
-                
-<nav class="navbar navbar-expand-lg navbar-dark primary-color">
+            <nav class="navbar navbar-expand-lg navbar-dark primary-color">
 
-    <a class="navbar-brand" href="#" style ={{color:'red'}}>GRUBHUB</a>
+<a class="navbar-brand" href="#" style ={{color:'red'}}>GRUBHUB</a>
 
 </nav>
+
+<div style ={{backgroundImage: `url(${Background})`,
+height: '300px'}}></div>
+            
+            <div className="container" style={{textAlign:'-webkit-center'}}> 
+                <h2>User Sign In</h2>
+            </div>
 
 
                 <div>

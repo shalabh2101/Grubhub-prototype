@@ -155,10 +155,10 @@ if(this.state.pastorder !== "No data found")
      </Table.Row>,
        <Table.Row>
        
-              <Table.Cell>{pastorder.resname}</Table.Cell>
+              <Table.Cell><h3>{pastorder.resname}</h3></Table.Cell>
                
               <Table.Cell>{this.getitems(pastorder.orderitems)} </Table.Cell>
-                
+                <br></br>
          </Table.Row>),
             )}
 
@@ -170,24 +170,28 @@ if(this.state.pastorder !== "No data found")
       <div>
         <br />
         
+
+        
         {this.state.logout && <Redirect to='/signinbuyer' />}
 
-        <div className="container">
-           <nav class="navbar navbar-expand-lg navbar-dark primary-color">
-             <a class="navbar-brand" href="#" style={{ color: 'red' }}>GRUBHUB</a>
-               <NavLink to="/userprofile" exact class="navbar-brand" activeStyle={{ color: 'red' }}>{this.state.name}</NavLink>
-            <a class="navbar-brand" style={{ color: 'blue' }} >{this.state.name}</a>
+        <nav class="navbar navbar-expand-lg navbar-dark primary-color">
 
-          </nav>
-     {/* //make objects from query */}
-          <h2>Breakfast</h2>
+<a class="navbar-brand" href="#" style ={{color:'red'}}>GRUBHUB</a>
+
+</nav>
+
+         <div className="container">
+           
+   <h2>Past Orders</h2>
          
 {orderlist}
+
+<br></br>
+<br></br>
+
 {Navlist}
 
-   <div style={{ width: '30%' }}>
-            <button className="btn btn-success"  >Log out</button>
-          </div>
+  
 
           <br />
 
