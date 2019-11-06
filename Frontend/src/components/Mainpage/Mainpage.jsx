@@ -10,16 +10,12 @@ class Mainpage extends Component{
         //Call the constrictor of Super class i.e The Component
         super(props);
         //maintain the state required for this component
-        
-    }
+ }
 
 render(){
     return(
 
 <div>
-
-
-
 
 <br/>
                 <h2 style={{color: 'red',

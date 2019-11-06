@@ -329,8 +329,7 @@ app.post('/getrestaurentmenu', function (req, res) {
 
 });
 
-// use in req 
-//check from where it is calling
+
 app.post('/getpastorders', function (req, res) {
 
 
