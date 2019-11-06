@@ -1,0 +1,10 @@
+[2019-11-05 11:50:26,749] WARN [RequestSendThread controllerId=0] Controller 0's connection to broker 10.250.111.117:9092 (id: 0 rack: null) was unsuccessful (kafka.controller.RequestSendThread)
+java.net.SocketTimeoutException: Failed to connect within 30000 ms
+	at kafka.controller.RequestSendThread.brokerReady(ControllerChannelManager.scala:272)
+	at kafka.controller.RequestSendThread.doWork(ControllerChannelManager.scala:225)
+	at kafka.utils.ShutdownableThread.run(ShutdownableThread.scala:82)
+[2019-11-05 11:50:27,117] DEBUG [Controller id=0] Resigning (kafka.controller.KafkaController)
+[2019-11-05 11:50:27,120] DEBUG [Controller id=0] Unregister BrokerModifications handler for Set(0) (kafka.controller.KafkaController)
+[2019-11-05 11:50:27,123] INFO [PartitionStateMachine controllerId=0] Stopped partition state machine (kafka.controller.PartitionStateMachine)
+[2019-11-05 11:50:27,123] INFO [ReplicaStateMachine controllerId=0] Stopped replica state machine (kafka.controller.ReplicaStateMachine)
+[2019-11-05 11:50:27,123] INFO [RequestSendThread controllerId=0] Shutting down (kafka.controller.RequestSendThread)

@@ -1,0 +1,6 @@
+[2019-11-05 09:50:11,778] WARN Client session timed out, have not heard from server in 7199623ms for sessionid 0x16e364105bb0069 (org.apache.zookeeper.ClientCnxn)
+[2019-11-05 09:50:11,811] INFO Client session timed out, have not heard from server in 7199623ms for sessionid 0x16e364105bb0069, closing socket connection and attempting reconnect (org.apache.zookeeper.ClientCnxn)
+[2019-11-05 09:50:12,007] INFO Opening socket connection to server localhost/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error) (org.apache.zookeeper.ClientCnxn)
+[2019-11-05 09:50:12,008] INFO Socket connection established to localhost/127.0.0.1:2181, initiating session (org.apache.zookeeper.ClientCnxn)
+[2019-11-05 09:50:12,025] INFO Session establishment complete on server localhost/127.0.0.1:2181, sessionid = 0x16e364105bb0069, negotiated timeout = 6000 (org.apache.zookeeper.ClientCnxn)
+[2019-11-05 09:50:16,586] WARN [Controller id=0, targetBrokerId=0] Connection to node 0 could not be established. Broker may not be available. (org.apache.kafka.clients.NetworkClient)
