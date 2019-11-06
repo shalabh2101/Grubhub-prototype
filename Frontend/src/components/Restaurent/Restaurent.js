@@ -55,8 +55,8 @@ class Restaurent extends Component {
     
 
     componentWillMount=()=>{
-      console.log("calling");
-var i;
+        console.log("calling");
+        var i;
         for(i=0;i<1000;i++)
         this.state.quan[i]=0;
         console.log(this.state.quan);
@@ -210,11 +210,11 @@ console.log(":inside checkout handler")
       name: localStorage.getItem('name_buyer'),
       id:localStorage.getItem('buyer_id'),
       rid:localStorage.getItem('rest_id'),
-      restname:localStorage.getItem('restimage'),
-      restimage:localStorage.getItem('restname'),
+      restname:localStorage.getItem('restname'),
+      restimage:localStorage.getItem('restimage'),
   }
 
-  axios.post('http://localhost:3001/orders/postorder/', data)
+  axios.post('http://localhost:3001/postorder/', data)
   .then(response=>{
     
      console.log("response  ",response);
@@ -336,7 +336,7 @@ messegehandler=()=>
 
 })
   .catch(err=>{
-      console.log('postorder  catch error: 1')
+      console.log('post messege  catch error: 1')
   console.log('err:', err)
   this.setState({
     messegebody:false,

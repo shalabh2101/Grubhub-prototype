@@ -17,7 +17,7 @@ class Pastorderpage extends Component {
     var lunchquantity = [];
 
     this.state = {
-
+      Orders:[],
       pastorder: []
     }
 
@@ -47,9 +47,38 @@ this.getitems=this.getitems.bind(this);
            console.log("order fetched");
           if (isNull(response.data)) { console.log("breakfast is null") }
           this.setState({
-            pastorder: response.data,
+           pastorder: response.data,
+            
           })
+
+         //setting partison length
+         var i=0;
+         var current=0;
+         var Orders1=[];
+        var temp=response.data;
+         console.log("temp");
+         console.log(temp);
+         console.log(temp.length);
+
+
+         //set length of the partitions
+         while(temp.length>current+2)
+         {
+          Orders1[++i]= temp.slice(current,current+2);
+          current=current+2;
+         }
+         Orders1[++i]=temp.slice(current,temp.length);
+
+         this.setState(
+           {
+              Orders:Orders1,
+              pastorder:Orders1[1]
+           }
+         )
+         console.log("Orders1");
+         console.log(Orders1);
         }
+        
         else { console.log("something not right") }
       })
       .catch(err => {
@@ -92,6 +121,21 @@ return  item.map(element => {
 
 
   render() {
+
+let Navlist;
+
+if(this.state.Orders.length>0)
+{  
+  Navlist=Object.keys(this.state.Orders).map((key) =>(
+
+      <button className="btn btn-success"  onClick={()=>this.setState({
+        pastorder:this.state.Orders[key]
+      })}>{key}</button>
+    
+  ))
+  
+
+}
 
     let orderlist;
     console.log(" Inside Render -this.state.pastorder ",this.state.pastorder)
@@ -139,6 +183,8 @@ if(this.state.pastorder !== "No data found")
           <h2>Breakfast</h2>
          
 {orderlist}
+{Navlist}
+
    <div style={{ width: '30%' }}>
             <button className="btn btn-success"  >Log out</button>
           </div>

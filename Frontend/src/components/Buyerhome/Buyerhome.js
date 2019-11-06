@@ -8,11 +8,10 @@ import { checklogin } from "../../actions/index.js";
 class Buyerhome extends Component{
 //constructor
 
-    constructor(props){
+        constructor(props){
         //Call the constrictor of Super class i.e The Component
         super(props);
         //maintain the state required for this component
-
 
         this.state = {
             
@@ -30,9 +29,7 @@ class Buyerhome extends Component{
          this.searchHomeCheck=this.searchHomeCheck.bind(this);
        }
 
-
-
-    searchChangeHandler=(e)=>{
+     searchChangeHandler=(e)=>{
      this.setState ({   
         search: e.target.value
         
@@ -169,14 +166,9 @@ render(){
     var url= "/search/" + this.state.search;
 
      let messegelist;
-    // console.log("this.state.messeges.length()");
-    // console.log(this.state.messeges.length());
-     console.log("this.state.messeges.length()");
-     console.log(this.state.messeges);
-     console.log("this.state.messeges.length()");
-     console.log(this.state.messeges.length);
     
-       if(this.state.messeges.length !==0)
+    
+       if(this.state.messeges.length !==0 &&  this.state.messeges!=="No data found")
        {
           messegelist=<table cellspacing="40">  
            

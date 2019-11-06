@@ -8,11 +8,9 @@ var mongo = require('mongodb');
 var MongoClient = mongo.MongoClient;
 var url = "mongodb://localhost:27017/";
 
-app.post('/getdata', function (req, res) {
+router.post('/', function (req, res) {
     console.log("Inside the getting name method")
-    console.log("  session email " + user.email)
-
-    console.log("req body  ", req.body)
+ console.log("req body  ", req.body)
 
   
  var checkstatus = "";
@@ -52,10 +50,10 @@ app.post('/getdata', function (req, res) {
                 else {
                     if (result.length != 0) {
                         checkstatus = result[0];
-                        user.id = result[0]._id;
-                        user.restimage=result[0].RestaurentImage;
-                        user.restname=result[0].Name;
-                        user.cuisine=result[0].Cuisine;
+                        // user.id = result[0]._id;
+                        // user.restimage=result[0].RestaurentImage;
+                        // user.restname=result[0].Name;
+                        // user.cuisine=result[0].Cuisine;
                     }
                     else
                         checkstatus = "No record found";

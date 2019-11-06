@@ -161,7 +161,7 @@ class Restaurent extends Component {
 
         console.log("Inside the  Restaurent Menu did mount")
         const data1= {
-            id: Restaurentid,
+            id: localStorage.getItem('rest_id'),
             type:'owner'
      }
 
@@ -293,7 +293,7 @@ console.log("this.state.Items");
                 <Table.Body>
                     <h2>{key}</h2>
                     {/* {newitemDialog } */}
-                    <button onClick={()=>this.setState({dialogstatus:true,currentsection:key})}>  Add New Item </button>
+                   
                     {
                         this.state.Items[key].map((breakfast) => (
                         <Table.Row key={breakfast._Id}>
@@ -301,6 +301,7 @@ console.log("this.state.Items");
                                 <Table.Cell>{breakfast.Price}</Table.Cell>
                         </Table.Row>),
                         )}
+                        <button onClick={()=>this.setState({dialogstatus:true,currentsection:key})}>  Add New Item </button>
 
                 </Table.Body>)
 

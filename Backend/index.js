@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
 const search=require("./routes/search");
+var kafka=require("./kafka/client")
 var cors = require('cors');
 const signup=require("./routes/signup");
 const updatebuyer=require("./routes/updatebuyer");
@@ -313,58 +314,65 @@ app.post('/getrestaurentmenu', function (req, res) {
 //check from where it is calling
 app.post('/getpastorders', function (req, res) {
 
-    console.log("Inside the getorders  backend page")
 
-    var query;
-    MongoClient.connect(url,async function (err, db) {
-        if (err) throw err;
-        var dbo = db.db("grubhub");
-         if (req.body.type === 'd')
-         query = {id:mongoose.Types.ObjectId(req.body.id),status:'d'};
-       //   query = {id:user.id,status:'d'};
-          else
-          query = {id:mongoose.Types.ObjectId(req.body.id),status:{ $ne :'d'}};
-        //  query = {id:user.id,status:{ $ne :'d'}};
+    kafka.make_request("pastOrder_topic",req.body,function(err,results){
+        console.log("--------Inside Past Orders request----------");
+        return res.status(200).send(results);
 
-      //  var query = { Name: req.body.food };
-      await  dbo.collection("Orders").find(query).toArray(function (err, result) {
-        if (err) {
-            console.log("Error", err)
-            res.end("Not able to connect to db--order buyer")
-        }
-        else {
-            console.log("Order Success")
-            console.log(result);
-            if (result.length >= 1) {
+    // console.log("Inside the getorders  backend page")
 
-                var finalresult = [];
-                result.forEach(element => {
+    // var query;
+    // MongoClient.connect(url,async function (err, db) {
+    //     if (err) throw err;
+    //     var dbo = db.db("grubhub");
+    //      if (req.body.type === 'd')
+    //      query = {id:mongoose.Types.ObjectId(req.body.id),status:'d'};
+    //    //   query = {id:user.id,status:'d'};
+    //       else
+    //       query = {id:mongoose.Types.ObjectId(req.body.id),status:{ $ne :'d'}};
+    //     //  query = {id:user.id,status:{ $ne :'d'}};
 
-                    var orders = element.Description.split("/");
-                    console.log("order is " + orders[0]);
-                    orders = orders.slice(1);
-                    console.log("order is " + orders[0]);
+    //   //  var query = { Name: req.body.food };
+    //   await  dbo.collection("Orders").find(query).toArray(function (err, result) {
+    //     if (err) {
+    //         console.log("Error", err)
+    //         res.end("Not able to connect to db--order buyer")
+    //     }
+    //     else {
+    //         console.log("Order Success")
+    //         console.log(result);
+    //         if (result.length >= 1) {
 
-                    const data = {
-                        resname: element.resname,
-                        orderitems: orders
-                    }
-                    finalresult.push(data);
-                });
+    //             var finalresult = [];
+    //             result.forEach(element => {
+
+    //                 var orders = element.Description.split("/");
+    //                 console.log("order is " + orders[0]);
+    //                 orders = orders.slice(1);
+    //                 console.log("order is " + orders[0]);
+
+    //                 const data = {
+    //                     resname: element.resname,
+    //                     orderitems: orders
+    //                 }
+    //                 finalresult.push(data);
+    //             });
                 
-                console.log(finalresult);
-                res.send(finalresult);
-            }
-            else {
-                res.send("No data found");
-            }
+    //             console.log(finalresult);
+    //             res.send(finalresult);
+    //         }
+    //         else {
+    //             res.send("No data found");
+    //         }
 
-        }
-          //  res.send(checkstatus);
-            db.close();
-        });
-    });
+    //     }
+    //       //  res.send(checkstatus);
+    //         db.close();
+    //     });
+    // });
 
+
+});
 
 });
 
